@@ -8,4 +8,31 @@ use Illuminate\Database\Eloquent\Model;
 class Purchase extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'item_id',
+        'payment_method',
+        'amount',
+        'shipping_postal_code',
+        'shipping_address',
+        'shipping_building',
+        'payment_date',
+        'stripe_transaction_id',
+    ];
+
+    protected $casts = [
+        'payment_date' => 'datetime',
+    ];
+
+    // one-to-one relationship (child)
+    public function item() {
+        return $this->belongsTo(Item::class);
+    }
+
+    // one-to-many relationship
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
 }

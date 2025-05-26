@@ -43,11 +43,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // relations
+    // one-to-one relationship
     public function profile() {
         return $this->hasOne(Profile::class);
     }
 
+    // one-to-many relationship
     public function items() {
         return $this->hasMany(Item::class);
     }
@@ -64,4 +65,8 @@ class User extends Authenticatable
         return $this->hasMany(Purchase::class);
     }
 
+    // many-to-many relationship (get favorite items)
+    public function likedItems() {
+        return $this->belongsToMany(Item::class, 'likes');
+    }
 }
