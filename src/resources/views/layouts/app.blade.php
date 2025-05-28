@@ -41,10 +41,10 @@
                     @endif
 
                     <li class="header-nav__item">
-                        <a href="/mypage" class="header-nav__link mypage">マイページ</a>
+                        <a href="{{ route('mypage') }}" class="header-nav__link mypage">マイページ</a>
                     </li>
                     <li class="header-nav__item">
-                        <a href="/sell" class="header-nav__link exhibit">出品</a>
+                        <a href="{{ route('sell') }}" class="header-nav__link exhibit">出品</a>
                     </li>
                 </ul>
             </div>

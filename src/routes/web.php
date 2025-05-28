@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ExhibitionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// public route
+Route::get('/', [ItemController::class, 'index'])->name('item.index');
+
+// non-authenticated user route
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'create'])->name('register');
     Route::post('/register', [AuthController::class, 'store'])->name('register');
@@ -21,7 +27,15 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-/*Route::middleware('auth')->group(function () {*/
+// authenticated user route
+Route::middleware('auth')->group(function() {
+    Route::get('/mypage', function () {
+        return view('mypage');
+    })->name('mypage');
+    Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');
+});
+
+/*Route::middleware('auth')->group(function () {
     Route::get('/profile', function() {
         return view('profile');
     })->name('profile');
@@ -30,3 +44,7 @@ Route::middleware('guest')->group(function () {
     return view('edit');
     })->name('edit');
 /*});*/
+
+Route::get('/edit', function () {
+    return view('edit');
+})->name('edit');

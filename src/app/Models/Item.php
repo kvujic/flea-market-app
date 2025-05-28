@@ -54,7 +54,7 @@ class Item extends Model
     // many-to-many relationship
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_item');
+        return $this->belongsToMany(Category::class, 'category_item', 'item_id', 'category_id');
     }
 
     // many-to-many relationship (get liked users)
