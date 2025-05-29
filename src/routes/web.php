@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +33,9 @@ Route::middleware('auth')->group(function() {
     Route::get('/mypage', function () {
         return view('mypage');
     })->name('mypage');
-    Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');
+    Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('edit');
+    Route::get('/mypage/profile', [ProfileController::class, 'updateProfile']);
+    Route::post('/sell', [ExhibitionController::class, 'create'])->name('sell');
 });
 
 /*Route::middleware('auth')->group(function () {

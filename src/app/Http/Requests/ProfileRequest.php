@@ -11,7 +11,7 @@ class ProfileRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,14 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'profile_image' => ['mimes:jpeg,png'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'profile_image.mimes' => '画像は.jpegまたは.png形式でアップロードしてください',
         ];
     }
 }

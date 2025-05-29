@@ -18,11 +18,13 @@
         @else
         @foreach ($items as $item)
         <div class="item-card">
-            <img src="{{ asset('storage/images/' . $item->item_image) }}" alt="{{ $item->name }}" class="item_image">
+            <div class="item-wrapper">
+                <img src="{{ asset('storage/' . $item->item_image) }}" alt="{{ $item->name }}" class="item-image">
+            </div>
+            <p class="item-label">{{ $item->name }}</p>
             @if ($item->is_sold)
             <div class="sold-ribbon">SOLD</div>
             @endif
-            <p class="item_label">{{ $item->name }}</p>
         </div>
         @endforeach
         @endif

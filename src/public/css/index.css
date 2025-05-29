@@ -30,6 +30,54 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin: 50px 0;
+    margin: 60px 0;
 }
 
+.item-card {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 15px auto;
+}
+
+.item-wrapper {
+    width: 250px;
+    height: 250px;
+    width: 100%;
+}
+
+.item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.item-label {
+    padding: 0 25px;
+
+}
+
+.sold-ribbon {
+    position: absolute;
+    top: 0;
+    left: 25px;
+    width: 0;
+    height: 0;
+    border-top: 85px solid #ff0000;
+    border-right: 85px solid transparent;
+    color: transparent;
+    z-index: 2;
+}
+
+.sold-ribbon::before {
+    content: "SOLD";
+    position: absolute;
+    top: -45px;
+    left: 5px;
+    transform: rotate(-45deg);
+    transform-origin: left top;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}

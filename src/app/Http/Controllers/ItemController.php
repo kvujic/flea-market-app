@@ -30,7 +30,7 @@ class ItemController extends Controller
         return view('items.index', compact('items', 'tab'));
     }
 
-    public function upload(Request $request) {
+    /*public function upload(Request $request) {
         $image = $request->file('item_image');
 
         // decide filename
@@ -48,23 +48,8 @@ class ItemController extends Controller
         ]);
     }
 
-    public function store(Request $request) {
-        $image = $request->file('item_image');
-        $filename = time() . '.' . $image->getClientOriginalExtension();
-        $savePath = storage_path('app/public/images/' . $filename);
-        Image::make($image)->fit(300, 300)->save($savePath);
-
-        Item::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'condition_id' => $request->condition_id,
-            'user_id' => auth()->id(), 
-            'item_image' => $filename, // ← ここにファイル名を保存
-            'is_sold' => false, 
-        ]);
-        return redirect()->route('item.index');
-    }
+    
+        */
 
     
 }
