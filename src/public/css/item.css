@@ -1,0 +1,286 @@
+.item-detail {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.item-content {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    column-gap: 30px;
+    margin: 50px auto;
+}
+
+
+.item-image {
+    width: 100%;
+    height: 550px;
+    margin-top: 50px;
+    margin-left: 20px;
+}
+
+.item-image__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.item-data {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-data__group {
+    padding: 0 60px;
+}
+
+.item-title {
+    font-size: 45px;
+    margin-bottom: 0;
+}
+
+.item-brand {
+    font-size: 20px;
+    margin: 0;
+}
+
+.item-price {
+    font-size: 30px;
+}
+
+.item-price__number {
+    font-size: 45px;
+}
+
+.item-meta {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+
+.item-data__group {
+    margin-right: 30px;
+}
+
+.icon-like {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 55px;
+    height: 65px;
+    text-decoration: none;
+}
+
+.icon-like__image,
+.icon-comment__image {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.icon-comment {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.liked-count,
+.comment-count {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 4px;
+    color: #333;
+    text-decoration: none;
+}
+
+.purchase-link {
+    background-color: #ff5555;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.purchase-btn {
+    text-decoration: none;
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.item-detail__title {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.item-detail__text,
+.item-detail__table {
+    font-size: 20px;
+}
+
+.item-detail__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 10px;
+}
+
+.item-detail__label {
+    padding-right: 20px;
+    text-align: left;
+}
+
+.category-item,
+.condition-item {
+    padding: 10px 0;
+    display: table-cell;
+    font-size: 18px;
+}
+
+.category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.category-tag {
+    display: inline-block;
+    background-color: #d9d9d9;
+    border-radius: 999px;
+    padding: 5px 18px;
+}
+
+.item-detail__category,
+.item-detail__condition {
+    padding: 10px 0;
+}
+
+.comment-box {
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.comment-empty,
+.comment-body {
+    font-size: 20px;
+    background-color: #e5e5e5;
+    padding: 10px 15px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.comment-user__info {
+    display: flex;
+    align-items: center;
+}
+
+.comment-user__image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: #e5e5e5;
+}
+
+.comment-user__name {
+    font-size: 25px;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+
+.comment-form__group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-form__label {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.comment-form__text {
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+    padding: 20px 30px;
+    margin: 10px 0;
+}
+
+.comment-form__error {
+    color: #ff0000;
+    height: 20px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.comment-form__btn {
+    width: 100%;
+    border: none;
+    background-color: #ff5555;
+    color: #fff;
+    padding: 10px 0;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+
+/* pagination */
+.pagination {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.pagination span {
+    width: 20px;
+    height: 20px;
+    margin: 0 10px;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #333;
+}
+
+
+@media screen and (max-width:850px) {
+    .item-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    .purchase-btn {
+        font-size: 20px;
+    }
+    .item-data {
+        margin: 0 auto;
+    }
+    .item-detail__table,
+    .item-detail__category,
+    .item-detail__label,
+    .category-item,
+    .item-detail__condition,
+    .condition-item {
+        display: block;
+        width: 100%;
+    }
+    .comment-form__btn {
+        font-size: 20px;
+    }
+}

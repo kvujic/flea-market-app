@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ExhibitionController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 // public route
 Route::get('/', [ItemController::class, 'index'])->name('item.index');
+Route::get('/item/{item}', [ItemController::class, 'show'])->name('item.show');
 
 // non-authenticated user route
 Route::middleware('guest')->group(function () {
@@ -30,24 +34,22 @@ Route::middleware('guest')->group(function () {
 
 // authenticated user route
 Route::middleware('auth')->group(function() {
-    Route::get('/mypage', function () {
-        return view('mypage');
-    })->name('mypage');
-    Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('edit');
-    Route::get('/mypage/profile', [ProfileController::class, 'updateProfile']);
-    Route::post('/sell', [ExhibitionController::class, 'create'])->name('sell');
+    Route::post('/items/{item}/like', [LikeController::class, 'store'])->name('item.like');
+    Route::post('/item/{item}/comment', [CommentController::class, 'store'])->name('item.comment');
+
+    Route::get('/purchase/{item}', [PurchaseController::class, 'show'])->name('purchase.purchase');
+    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::get('/purchase/address/{item}', [PurchaseController::class, 'edit'])->name('purchase.address');
+    Route::post('/purchase/address/{item}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
+
+    Route::get('/mypage', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/mypage/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+
+    Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');
+    Route::post('/sell', [ExhibitionController::class, 'store'])->name('sell');
 });
 
-/*Route::middleware('auth')->group(function () {
-    Route::get('/profile', function() {
-        return view('profile');
-    })->name('profile');
 
-    Route::get('/edit', function () {
-    return view('edit');
-    })->name('edit');
-/*});*/
 
-Route::get('/edit', function () {
-    return view('edit');
-})->name('edit');
+

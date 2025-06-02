@@ -24,7 +24,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            'password' => ['required', 'min:8'],
             'password_confirmation' => ['required'],
         ];
     }
@@ -34,12 +34,20 @@ class RegisterRequest extends FormRequest
         return [
             'name.required' => 'お名前を入力してください',
             'email.required' => 'メールアドレスを入力してください',
-            'email.email' => '有効なメールアドレスを入力してください',
+            'email.email' => 'メールアドレスは「ユーザー名＠ドメイン」形式で入力してください',
+            'email.unique' => 'メールアドレスはすでに使用されています',
             'password.required' => 'パスワードを入力してください',
             'password.min' => 'パスワードは８文字以上で入力してください',
-            'password.confirmed' => 'パスワードと一致しません',
             'password_confirmation.required' => '確認用パスワードを入力してください'
 
         ];
+    }
+
+    public function withValidator($validator) {
+        $validator->after(function ($validator) {
+            if ($this->input('password') !== $this->input('password_confirmation')) {
+                $validator->errors()->add('password_confirmation', 'パスワードと一致しません');
+            }
+        });
     }
 };

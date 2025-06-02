@@ -53,10 +53,6 @@ class User extends Authenticatable
         return $this->hasMany(Item::class);
     }
 
-    public function likes() {
-        return $this->belongsToMany(Like::class);
-    }
-
     public function comments() {
         return $this->hasMany(Comment::class);
     }
@@ -65,8 +61,13 @@ class User extends Authenticatable
         return $this->hasMany(Purchase::class);
     }
 
-    // many-to-many relationship (get favorite items)
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    // many-to-many relationship (get favorite items through like)
     public function likedItems() {
-        return $this->belongsToMany(Item::class, 'likes');
+        return $this->belongsToMany(Item::class, 'likes', 'user_id', 'item_id');
     }
 }

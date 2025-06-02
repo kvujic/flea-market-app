@@ -10,12 +10,12 @@ use Illuminate\Http\Request;
 
 class ExhibitionController extends Controller
 {
-    public function sell()
+    public function create()
     {
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        return view('sell');
+        return view('exhibition');
     }
 
     public function store(ExhibitionRequest $request)

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 
 class ItemController extends Controller
@@ -14,7 +14,11 @@ class ItemController extends Controller
 
     public function index(Request $request) {
 
+        $categories = Category::all();
+
         $tab = $request->query('tab', 'recommended');
+        $keyword = $request->input('keyword');
+
         
         if ($tab === 'mylist') {
             // in case of non-authentication
@@ -22,34 +26,33 @@ class ItemController extends Controller
                 return redirect()->route('login');
             }
             // get mylist of authenticated user
-            $items = auth()->user()->likedItems()->with('categories')->get();
+            $items = auth()->user()
+            ->likedItems()
+            ->with('categories')
+            ->search($keyword)
+            ->get();
         }else{
             // get recommended items
-            $items = Item::with('categories')->get();
+            $query = Item::with('categories')
+            ->search($keyword);
+            // exclude seller's items
+            if (auth()->check()) {
+                $query->where('user_id', '!=', auth()->id());
+            }
+            $items = $query->get();
         }
-        return view('items.index', compact('items', 'tab'));
+
+        return view('items.index', compact('items', 'tab', 'categories'));
     }
 
-    /*public function upload(Request $request) {
-        $image = $request->file('item_image');
+    public function show($id) {
+        $item = Item::with('user.profile', 'categories')->findOrFail($id);
 
-        // decide filename
-        $filename = time() . '.' . $image->getClientOriginalExtension();
-        // path (storage/app/public/images)
-        $savePath = storage_path('app/public/images/' . $filename);
-        // resize and save with Intervention Image
-        Image::make($image)->fit(300, 300)->save($savePath);
-        // changes URL for publication
-        $url = asset('storage/images/' . $filename);
+        $comments = $item->comments()
+        ->with('user.profile')
+        ->latest()
+        ->paginate(5);
 
-        return response()->json([
-            'filename' => $filename,
-            'url' => $url,
-        ]);
+        return view('items.item', compact('item', 'comments'));
     }
-
-    
-        */
-
-    
 }

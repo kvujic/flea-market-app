@@ -22,7 +22,7 @@
             <div class="search-form">
                 <form action="/" class="search-form__form" method="GET">
                     @csrf
-                    <input type="text" class="search-form__input" name="keyword" placeholder="何をお探しですか？" value="{{ request('keyword') }}">
+                    <input type="text" class="search-form__input" name="keyword" placeholder="なにをお探しですか？" value="{{ request('keyword') }}">
                 </form>
             </div>
             <div class="header-nav">
@@ -41,7 +41,7 @@
                     @endif
 
                     <li class="header-nav__item">
-                        <a href="{{ route('mypage') }}" class="header-nav__link mypage">マイページ</a>
+                        <a href="{{ route('profile.index') }}" class="header-nav__link mypage">マイページ</a>
                     </li>
                     <li class="header-nav__item">
                         <a href="{{ route('sell') }}" class="header-nav__link exhibit">出品</a>
@@ -54,6 +54,7 @@
 
     <main>
         @yield('content')
+        @yield('js')
     </main>
 
 </body>

@@ -23,6 +23,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'user_id' => 1,
                 'name' => '腕時計',
+                'brand' => 'EMPORIO ARMANI',
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'price' => 15000,
                 'is_sold' => true,
@@ -34,7 +35,7 @@ class ItemsTableSeeder extends Seeder
                 'name' => 'HDD',
                 'description' => '高速で信頼性の高いハードディスク',
                 'price' => 5000,
-                'is_sold' => true,
+                'is_sold' => false,
                 'condition_id' => 2,
                 'item_image' => 'images/Disk.jpg',
             ],

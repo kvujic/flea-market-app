@@ -38,7 +38,6 @@ class Item extends Model
         return $this->belongsTo(Condition::class);
     }
 
-
     // one-to-many relationship (parent)
     public function likes()
     {
@@ -50,7 +49,6 @@ class Item extends Model
         return $this->hasMany(Comment::class);
     }
 
-
     // many-to-many relationship
     public function categories()
     {
@@ -58,8 +56,16 @@ class Item extends Model
     }
 
     // many-to-many relationship (get liked users)
-    public function likeByUsers()
+    public function likedByUsers()
     {
         return $this->belongsToMany(User::class, 'likes');
+    }
+
+    // search
+    public function scopeSearch($query, $keyword) {
+        if (!empty($keyword)) {
+            $query->where('name', 'like', '%' . $keyword . '%');
+        }
+        return $query;
     }
 }

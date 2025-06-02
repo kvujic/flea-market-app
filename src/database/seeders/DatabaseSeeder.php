@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             ItemsTableSeeder::class,
             CategoryItemTableSeeder::class,
+            LikesTableSeeder::class,
+            PurchasesTableSeeder::class,
+            ProfilesTableSeeder::class,
+            CommentsTableSeeder::class,
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
