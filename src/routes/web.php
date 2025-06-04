@@ -34,7 +34,7 @@ Route::middleware('guest')->group(function () {
 
 // authenticated user route
 Route::middleware('auth')->group(function() {
-    Route::post('/items/{item}/like', [LikeController::class, 'store'])->name('item.like');
+    Route::post('/item/{item}/like', [LikeController::class, 'store'])->name('item.like');
     Route::post('/item/{item}/comment', [CommentController::class, 'store'])->name('item.comment');
 
     Route::get('/purchase/{item}', [PurchaseController::class, 'show'])->name('purchase.purchase');
@@ -48,7 +48,16 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');
     Route::post('/sell', [ExhibitionController::class, 'store'])->name('sell');
+
+    // stripe
+    Route::get('/purchase/success/{item}', function () {
+        return view('purchase.success');
+    })->name('purchase.success');
+    Route::get('/purchase/cancel/{item}', function () {
+        return view('purchase.cancel');
+    })->name('purchase.cancel');
 });
+
 
 
 

@@ -1,14 +1,19 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/item.css') }}">
+<link rel="stylesheet" href="{{ asset('css/items/item.css') }}">
 @endsection
 
 @section('content')
 <div class="item-detail">
     <div class="item-content">
         <div class="item-image">
-            <img class="item-image__image" src="{{ asset('storage/' . $item->item_image) }}" alt="{{ $item->name }}">
+            <div class="item-image__wrapper">
+                <img class="item-image__image" src="{{ asset('storage/' . $item->item_image) }}" alt="{{ $item->name }}">
+                @if ($item->is_sold)
+                <div class="sold-ribbon">SOLD</div>
+                @endif
+            </div>
         </div>
         <div class="item-data">
             <div class="item-data__group">
@@ -82,14 +87,14 @@
                     @else
                     @foreach($comments as $comment)
                     <div class="comment-user__info">
-                        @if ($comment->user->profile->profile_image)
+                        @if ($comment->user->profile && $comment->user->profile->profile_image)
                         <img src="{{ asset('storage/profiles/' . $comment->user->profile->profile_image) }}" alt="profile-image" class="comment-user__image">
                         @else
-                        <div class="comment-user__image" default-icon></div>
+                        <img src="{{ asset('storage/profiles/default-profile.svg') }}" alt="default-image" class="comment-user__image">
                         @endif
                         <p class="comment-user__name">{{ $comment->user->name }}</p>
                     </div>
-                    <p class="comment-body">{{ $comment->content }}</p>
+                    <p class="comment-body">{!! nl2br(e($comment->content)) !!}</p>
                     @endforeach
                     @endif
                     <div class="comment-pagination">
@@ -104,7 +109,7 @@
                         @error('content')
                         <div class="comment-form__error">{{ $message }}</div>
                         @enderror
-                         <button class="comment-form__btn" type="submit">コメントを送信する</button>
+                        <button class="comment-form__btn" type="submit">コメントを送信する</button>
                     </div>
                 </form>
             </div>

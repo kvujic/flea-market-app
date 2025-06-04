@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('edit');
+        return redirect()->route('mypage.edit');
     }
 
     public function showLogin() {

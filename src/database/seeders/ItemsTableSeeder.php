@@ -80,7 +80,7 @@ class ItemsTableSeeder extends Seeder
                 'name' => 'ショルダーバッグ',
                 'description' => 'おしゃれなショルダーバッグ',
                 'price' => 3500,
-                'is_sold' => true,
+                'is_sold' => false,
                 'condition_id' => 3,
                 'item_image' => 'images/Purse.jpg',
             ],

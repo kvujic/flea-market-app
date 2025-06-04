@@ -20,18 +20,18 @@
             </a>
             @if (!Request::is('register') && !Request::is('login')) {{--&& !Request::is('verification.notice')メール認証作成後に追加する--}}
             <div class="search-form">
-                <form action="/" class="search-form__form" method="GET">
+                <div class="search-form__form">
                     @csrf
-                    <input type="text" class="search-form__input" name="keyword" placeholder="なにをお探しですか？" value="{{ request('keyword') }}">
-                </form>
+                    <input type="text" id="keywordInput" class="search-form__input" name="keyword" placeholder="なにをお探しですか？" value="{{ request('keyword') }}">
+                </div>
             </div>
             <div class="header-nav">
                 <ul class="header-nav__inner">
                     @if(Auth::check())
                     <li class="header-nav__item">
-                        <form class="header-nav__logout-form" action="{{ route('logout') }}" method="POST">
+                        <a href="#" id="logout-link" class="header-nav__link logout">ログアウト</a>
+                        <form id="logout-form" class="header-nav__logout-form" action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button type="submit" class="header-nav__link logout">ログアウト</button>
                         </form>
                     </li>
                     @else
@@ -57,6 +57,8 @@
         @yield('js')
     </main>
 
+    <script src="{{ asset('js/search.js') }}"></script>
+    <script src="{{ asset('js/logout.js') }}"></script>
 </body>
 
 </html>

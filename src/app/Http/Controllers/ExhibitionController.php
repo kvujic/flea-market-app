@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Condition;
+use App\Models\Category;
 use App\Http\Requests\ExhibitionRequest;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +17,11 @@ class ExhibitionController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login');
         }
-        return view('exhibition');
+
+        $categories = Category::all();
+        $conditions = Condition::all();
+
+        return view('exhibition', compact('categories', 'conditions'));
     }
 
     public function store(ExhibitionRequest $request)
@@ -38,3 +44,4 @@ class ExhibitionController extends Controller
         return redirect()->route('item.index');
     }
 }
+

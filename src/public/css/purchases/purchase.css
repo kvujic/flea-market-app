@@ -1,0 +1,276 @@
+.purchase-content {
+    width: 100%;
+}
+
+.purchase-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 40px;
+}
+
+.purchase-group {
+    width: 100%;
+    margin: 50px 0;
+}
+
+.purchase-group__data {
+    margin: 0 40px;
+    width: 90%;
+}
+
+.purchase-item {
+    display: flex;
+}
+
+.purchase-item__image-wrapper {
+    width: 250px;
+    height: 250px;
+    position: relative;
+}
+
+.purchase-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sold-ribbon {
+    position: absolute;
+    top: 0px;
+    left: -10;
+    width: 0;
+    height: 0;
+    border-top: 85px solid #ff0000;
+    border-right: 85px solid transparent;
+    color: transparent;
+    z-index:    10;
+}
+
+.sold-ribbon::before {
+    content: "SOLD";
+    position: absolute;
+    top: -45px;
+    left: 5px;
+    transform: rotate(-45deg);
+    transform-origin: left top;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+
+
+
+.purchase-item__item {
+    width: 50%;
+    margin-left: 40px;
+}
+
+.purchase-item__title {
+    font-size: 30px;
+    margin-top: 0;
+
+}
+
+.purchase-item__price {
+    font-size: 32px;
+}
+
+.purchase-item__price-yen {
+    font-size: 27px;
+    margin-right: 10px;
+}
+
+.line {
+    border-bottom: 1px solid #000;
+    margin: 50px 30px 0 30px;
+    width: 90%;
+}
+
+.payment-method {
+    margin-top: 40px;
+}
+
+.custom-select-box {
+    position: relative;
+    width: 100%;
+    max-width: 200px;
+    font-size: 16px;
+    user-select: none;
+}
+
+.selected {
+    padding: 5px 15px;
+    margin-left: 40px;
+    width: 300px;
+    min-height: 38px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #000;
+}
+
+.options {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #636769;
+    z-index: 10;
+    border-radius: 3px;
+    margin-left: 40px;
+    width: 300px;
+}
+
+.options.active {
+    display: block;
+}
+
+.option {
+    padding: 5px 30px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.option:hover,
+.option.selected {
+    background-color: #5599eb;
+    color: #fff;
+    position: relative;
+    left: -41px;
+    margin-left: 40px;
+    width: 300px;
+}
+
+.option.selected::before {
+    content: '✔︎';
+    position: absolute;
+    left: 10px;
+}
+
+.custom-select-box > .selected {
+    position: relative;
+}
+
+.custom-select-box > .selected::after {
+    position: absolute;
+    content: '';
+    top: 12px;
+    right: 10px;
+    border-top: 12px solid #5f5f5f;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+}
+
+.purchase-form__error {
+    color: #ff0000;
+    height: 20px;
+    margin-left: 85px;
+}
+
+.shipping-address__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.purchase-group__label {
+    font-size: 20px;
+    margin-bottom: 50px;
+}
+.shipping-address__change {
+    text-decoration: none;
+    margin-right: 80px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #0073cc;
+}
+
+.shipping-address__body {
+    margin-left: 40px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.shipping-address__postal-code,
+.shipping-address__address,
+.shipping-address__building {
+    margin: 0;
+}
+
+.purchase-group__confirmation {
+    margin: 10px 0;
+    margin-right: 30px;
+    width: 90%;
+}
+
+.confirmation-table {
+    width: 100%;
+    margin-right: 40px;
+}
+
+.confirmation-table__row {
+    border: 1px solid #000;
+}
+
+.confirmation-table__label {
+    width: 50%;
+    font-size: 20px;
+    font-weight: normal;
+    padding: 50px 0;
+}
+
+.confirmation-table__price {
+    font-size: 28px;
+    gap: 15px;
+}
+
+.confirmation-price-yen,
+.confirmation-table__method {
+    font-size: 24px;
+}
+
+.confirmation-price-yen {
+    margin-right: 10px;
+}
+
+.confirmation-table__price,
+.confirmation-table__method {
+    width: 50%;
+    padding-left: 20px;
+}
+
+.purchase-group__btn {
+    width: 90%;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.purchase-form__btn-buy {
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #ff5555;
+    color: #fff;
+    width: 100%;
+    padding: 12px 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 850px) {
+    .purchase-inner {
+        display: flex;
+        flex-direction: column;
+    }
+    .purchase-group__confirmation {
+        margin: 0 auto;
+    }
+    .purchase-group__btn {
+        margin: 80px auto;
+    }
+}

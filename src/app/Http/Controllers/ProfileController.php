@@ -15,22 +15,30 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
-        return view('mypage.profile', compact('user'));
+        $profile = $user->profile;
+
+        $tab = $request->input('tab');
+        if($tab === 'buy') {
+            $items = $user->purchases()->with('item')->get()->pluck('item');
+        } else {
+            $items = $user->items;
+        }
+
+        return view('mypage.profile', compact('user', 'profile', 'items'));
     }
 
     public function edit()
     {
         $user = auth()->user();
         $profile = $user->profile;
-        return view('profile.edit', compact('user', 'profile'));
+        return view('mypage.edit', compact('user', 'profile'));
     }
 
     public function updateProfile(ProfileRequest $request) {
         $user = auth()->user();
-        $validated = $request->validated();
         $profile = $user->profile ?? new Profile();
 
         if ($request->hasFile('profile_image')) {
@@ -38,7 +46,6 @@ class ProfileController extends Controller
             $profile->profile_image = basename($filename);
         }
 
-        $profile->fill($validated);
         $profile->user_id = $user->id;
         $profile->save();
 

@@ -83,6 +83,7 @@ body {
 
 .header-nav__logout-form {
     margin: 0;
+    display: none;
 }
 
 .exhibit {
