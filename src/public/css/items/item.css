@@ -25,7 +25,7 @@
 .item-image__image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .sold-ribbon {
@@ -165,6 +165,9 @@
 }
 
 .item-detail__label {
+    vertical-align: top;
+    width: 25%;
+    padding-top: 10px;
     padding-right: 20px;
     text-align: left;
 }
@@ -174,6 +177,10 @@
     padding: 10px 0;
     display: table-cell;
     font-size: 18px;
+}
+
+.condition-item {
+    padding-left: 20px;
 }
 
 .category-tags {

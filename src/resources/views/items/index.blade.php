@@ -12,13 +12,13 @@
     </div>
     <hr class="separator">
 
+    @if ($items -> isEmpty())
+    <p class="item-no-list">商品がありません</p>
+    @else
     <div class="item-list">
-        @if ($items -> isEmpty())
-        <p>商品がありません</p>
-        @else
         @foreach ($items as $item)
-        <div class="item-card">
-            <a href="{{ route('item.show', $item->id) }}" class="item-link">
+        <div class="item-card {{ $item->is_sold ? 'is_sold' : '' }}">
+            <a href="{{ $item->is_sold ? 'javascript:void(0);' : route('item.show', $item->id) }}" class="item-link">
                 <div class="item-wrapper">
                     <img src="{{ asset('storage/' . $item->item_image) }}" alt="{{ $item->name }}" class="item-image">
                 </div>

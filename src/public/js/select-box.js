@@ -1,8 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('🔧 JS Loaded');
+
     const selectBoxes = document.querySelectorAll('.custom-select-box');
+    console.log('📦 selectBoxes:', selectBoxes.length);
+
 
     selectBoxes.forEach(box => {
         const selected = box.querySelector('.selected');
+        console.log('🎯 selected:', selected);
         const optionsContainer = box.querySelector('.options');
         const optionList = box.querySelectorAll('.option');
         const hiddenInput = box.querySelector('input[type="hidden"]');
@@ -10,17 +15,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!selected || !optionsContainer || optionList.length === 0) return;
 
-        selected.addEventListener('click', () => {
+        selected.addEventListener('click', (e) => {
+            console.log('🖱️ clicked');
+            e.stopPropagation();
             optionsContainer.classList.toggle('active');
         });
 
         optionList.forEach(option => {
-            option.addEventListener('click', () => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+
                 optionList.forEach(o => o.classList.remove('selected'));
                 option.classList.add('selected');
-                selected.textContent = option.textContent;
 
-                if (hiddenInput) hiddenInput.value = option.textContent;
+                selected.textContent = option.textContent;
+                if (hiddenInput) hiddenInput.value = option.dataset.id;
 
                 if (selectedMethodDisplay && hiddenInput.name === 'payment_method') {
                     selectedMethodDisplay.textContent = option.textContent;

@@ -24,8 +24,9 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
+        $user->sendEmailVerificationNotification();
 
-        return redirect()->route('mypage.edit');
+        return redirect()->route('verification.notice');
     }
 
     public function showLogin() {
@@ -35,7 +36,7 @@ class AuthController extends Controller
     public function login(LoginRequest $request) {
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->route('item.index');
         }
 
         return back()->withErrors([

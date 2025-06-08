@@ -20,28 +20,59 @@ class ExhibitionController extends Controller
 
         $categories = Category::all();
         $conditions = Condition::all();
+        $selectedCategoryIds = [];
+        $item = null;
 
-        return view('exhibition', compact('categories', 'conditions'));
+        return view('exhibition', compact('categories', 'conditions', 'selectedCategoryIds', 'item'));
     }
 
     public function store(ExhibitionRequest $request)
     {
-        $image = $request->file('item_image');
-        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+        //dd($_FILES);
 
-        $image->storeAs('images', $filename, 'public');
+        try {
+            $validated = app(\App\Http\Requests\ExhibitionRequest::class)->validated();
 
-        Item::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'condition_id' => $request->condition_id,
-            'user_id' => auth()->id(),
-            'item_image' => "images/{$filename}", // ← ここにファイル名を保存
-            'is_sold' => false,
-        ]);
+            $image = $request->file('item_image');
 
-        return redirect()->route('item.index');
+            //dd($image->isValid(), $image->getPathname(), $image->getClientMimeType());
+
+
+
+            if (!$image) {
+                throw new \Exception('ファイル形式が正しくないか、アップロードに失敗しました。商品画像は.jpegまたは.png形式でアップロードしてください');
+            }
+
+            // mimes type check
+            $allowedMimeTypes = ['image/jpeg', 'image/png'];
+            $mimeType = $image->getMimeType();
+            if (!in_array($mimeType, $allowedMimeTypes)) {
+                throw new \Exception("対応していない画像形式です{{$mimeType}}。.jpegまたは.png形式でアップロードしてください。");
+            }
+
+            $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+            Storage::disk('public')->putFileAs('images', $image, $filename);
+
+            $item = Item::create([
+                'name' => $request->name,
+                'brand' => $request->brand,
+                'description' => $request->description,
+                'price' => $request->price,
+                'condition_id' => $request->condition_id,
+                'user_id' => auth()->id(),
+                'item_image' => "images/{$filename}", // ← ここにファイル名を保存
+                'is_sold' => false,
+            ]);
+
+            $item->categories()->sync($request->categories);
+
+            //dd($item->description);
+
+            return redirect()->route('item.index');
+
+        } catch (\Exception $e) {
+            return back()->withErrors(['item_image' => 'アップロードに失敗しました' . $e->getMessage()])->withInput();
+        }
     }
 }
 

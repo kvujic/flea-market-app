@@ -11,27 +11,31 @@
             @csrf
             <h1 class="edit-form__title">プロフィール設定</h1>
             <div class="image-upload__frame">
-
                 @php
-                $profileImagePath = !empty($profile) && !empty($profile->profile_image)
+                $profileImagePath = $profile && $profile->profile_image && Storage::disk('public')->exists('profiles/' . $profile->profile_image)
                 ? 'storage/profiles/' . $profile->profile_image
-                : 'storage/profiles/default-profile.svg';
-
-                $shouldShowImage = !empty($profile) && !empty($profile->profile_image);
+                : 'storage/profiles/default-image.png';
                 @endphp
 
-                <img src="{{ asset($profileImagePath) }}" class="edit-image__image preview-image {{ $shouldShowImage ? '' : 'hidden' }}" data-default-src="{{ asset('storage/profiles/default-profile.svg') }}" alt="profile_image">
+                <img src="{{ asset($profileImagePath) }}"
+                    class="edit-image__image preview-image"
+                    data-default-src="{{ asset('storage/profiles/default-profile.svg') }}"
+                    alt="profile_image">
 
                 <div class="image__control">
                     <label class="custom-file__upload">
-                        <input type="file" class="image-input" name="{{ isset($profile) ? 'profile_image' : 'item_image' }}" accept="image/*" data-preview-target=".preview-image" data-label-target=".image-label">
+                        <input type="file"
+                            class="image-input"
+                            name="profile_image"
+                            accept="image/*"
+                            data-preview-target=".preview-image"
+                            data-label-target=".image-label">
                         <span class="image-label">画像を選択する</span>
                     </label>
                     @error('profile_image')
-                    <div class="edit-form__error">{{ $message }}</div>
+                    <div class="edit-form__error-message">{{ $message }}</div>
                     @enderror
                 </div>
-
             </div>
 
             <div class="edit-form__content">

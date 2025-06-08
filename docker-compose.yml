@@ -17,7 +17,7 @@ services:
             - ./src:/var/www/
 
     mysql:
-        platform: linux/x86_64
+        platform: linux/amd64
         image: mysql:8.0.26
         environment:
             MYSQL_ROOT_PASSWORD: root
@@ -31,7 +31,7 @@ services:
             - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
 
     phpmyadmin:
-        platform: linux/x86_64
+        platform: linux/amd64
         image: phpmyadmin/phpmyadmin
         environment:
             - PMA_ARBITRARY=1
@@ -42,3 +42,11 @@ services:
             - mysql
         ports:
             - 8080:80
+
+    mailhog:
+        platform: linux/amd64
+        image: mailhog/mailhog
+        container_name: mailhog
+        ports:
+            - "1025:1025"  #SMTP server
+            - "8025:8025"  #Web UI

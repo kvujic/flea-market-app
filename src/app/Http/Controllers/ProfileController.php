@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Models\User;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,7 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $user = auth()->user();
+        $user = auth()->user()->load('profile');
         $profile = $user->profile;
 
         $tab = $request->input('tab');
@@ -38,17 +39,44 @@ class ProfileController extends Controller
     }
 
     public function updateProfile(ProfileRequest $request) {
-        $user = auth()->user();
-        $profile = $user->profile ?? new Profile();
+        try {
+            $user = auth()->user()->load('profile');
+            $profile = $user->profile ?? new Profile();
 
-        if ($request->hasFile('profile_image')) {
-            $filename = $request->file('profile_image')->store('public/profiles');
-            $profile->profile_image = basename($filename);
+            $validated = $request->validated();
+
+            if ($request->hasFile('profile_image')) {
+                $file = $request->file('profile_image');
+
+                // ファイルが正常にアップロードされているか確認
+                if ($file->isValid()) {
+                    // 既存の画像があれば削除
+                    if ($profile->profile_image && Storage::disk('public')->exists('profiles/' . $profile->profile_image)) {
+                        Storage::disk('public')->delete('profiles/' . $profile->profile_image);
+                    }
+
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = uniqid() . '.' . $extension;
+
+                    // storeAsメソッドを使用して、publicディスク内のprofilesディレクトリに保存
+                    $file->storeAs('profiles', $filename, 'public');
+                    $validated['profile_image'] = $filename;
+                }
+            }
+
+            $profile->fill($validated);
+            $profile->user_id = $user->id;
+            $profile->save();
+
+            return redirect()->route('item.index')->with('success', 'プロフィールを更新しました');
+
+        } catch (\Exception $e) {
+        // エラーログに記録
+        \log::error('profile update failed: ' . $e->getMessage());
+
+        return redirect()->back()
+        ->withInput()
+        ->with('error', 'プロフィールの更新に失敗しました');
         }
-
-        $profile->user_id = $user->id;
-        $profile->save();
-
-        return redirect()->route('profile.index');
     }
-} 
+}

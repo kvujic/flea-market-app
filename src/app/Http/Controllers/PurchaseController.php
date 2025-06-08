@@ -16,7 +16,7 @@ class PurchaseController extends Controller
 
         // redirect edit.blade.php if there is no profile saved
         if (!$profile || !$profile->postal_code || !$profile->address) {
-            return redirect()->route('mypage.edit');
+            return redirect()->route('profile.edit');
         }
 
         $item->load('purchase');
@@ -25,7 +25,7 @@ class PurchaseController extends Controller
             'item' => $item,
             'postal_code' => session('shipping_postal_code', $profile->postal_code),
             'address' => session('shipping_address', $profile->address),
-            'building' => session('shipping_building', ''),
+            'building' => session('shipping_building', $profile->building),
         ]);
     }
 
@@ -49,8 +49,9 @@ class PurchaseController extends Controller
                 'mode' => 'payment',
                 'success_url' => route('purchase.success', ['item' => $item->id]),
                 'cancel_url' => route('purchase.cancel', ['item' => $item->id]),
-                ]);
-                return redirect($session->url);
+            ]);
+
+            return redirect($session->url);
         }
 
 

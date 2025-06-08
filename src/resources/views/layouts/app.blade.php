@@ -15,10 +15,32 @@
 <body>
     <header class="header">
         <div class="header-inner">
-            <a href="/" class="header-logo__link">
+
+            @php
+            $onItemShowPage = Request::routeIs('item.show');
+            $isVerificationNotice = Request::routeIs('verification.notice')
+            @endphp
+
+            @if (Auth::check())
+                @if (auth()->user()->hasVerifiedEmail() || $onItemShowPage)
+                <a href="{{ route('item.index') }}" class="header-logo__link">
+                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+                </a>
+                @elseif ($isVerificationNotice)
+                <span class="header-logo__link disabled" title="メール認証が完了していません">
+                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+                </span>
+                @else
+                <a href="{{ route('item.index') }}" class="header-logo__link">
+                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+                </a>
+                @endif
+            @else
+            <a href="{{ route('item.index') }}" class="header-logo__link">
                 <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </a>
-            @if (!Request::is('register') && !Request::is('login')) {{--&& !Request::is('verification.notice')メール認証作成後に追加する--}}
+            @endif
+            @if (!Request::is('register') && !Request::is('login') && !Request::is('email/verify'))
             <div class="search-form">
                 <div class="search-form__form">
                     @csrf

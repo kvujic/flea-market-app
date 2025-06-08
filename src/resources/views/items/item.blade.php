@@ -57,7 +57,7 @@
 
             <div class="item-data__group description">
                 <h2 class="item-detail__title">商品説明</h2>
-                <p class="item-detail__text">{{ $item->description }}</p>
+                <p class="item-detail__text">{!! nl2br(e($item->description)) !!}</p>
             </div>
             <div class="item-data__group info">
                 <h2 class="item-detail__title">商品の情報</h2>

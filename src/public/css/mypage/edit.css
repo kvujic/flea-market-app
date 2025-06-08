@@ -56,11 +56,16 @@
     display: none;
 }
 
+.edit-form__error-message {
+    color: #ff0000;
+    height: 20px;
+    margin-top: 20px;
+}
 
 .edit-form__error {
     color: #ff0000;
     height: 20px;
-    margin-top: 30px;
+    
 }
 
 .edit-form__content {
