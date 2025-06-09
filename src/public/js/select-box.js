@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const hiddenInput = box.querySelector('input[type="hidden"]');
         const selectedMethodDisplay = document.getElementById('selected_method');
 
-        if (!selected || !optionsContainer || optionList.length === 0) return;
+        if (!selected || !optionsContainer || optionList.length === 0 || !hiddenInput) return;
 
         selected.addEventListener('click', (e) => {
             console.log('🖱️ clicked');
@@ -28,11 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 optionList.forEach(o => o.classList.remove('selected'));
                 option.classList.add('selected');
 
-                selected.textContent = option.textContent;
-                if (hiddenInput) hiddenInput.value = option.dataset.id;
+                const selectedValue = option.dataset.id;
+                selected.textContent = selectedValue;
+                hiddenInput.value = selectedValue;
+
+                //if (hiddenInput) hiddenInput.value = option.textContent.trim();
 
                 if (selectedMethodDisplay && hiddenInput.name === 'payment_method') {
-                    selectedMethodDisplay.textContent = option.textContent;
+                    selectedMethodDisplay.textContent = selectedValue;
                 }
 
                 optionsContainer.classList.remove('active');

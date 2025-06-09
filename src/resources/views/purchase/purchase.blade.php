@@ -28,8 +28,8 @@
                     <div class="custom-select-box">
                         <div class="selected">{{ old('payment_method') ? old('payment_method') : '選択してください' }}</div>
                         <div class="options">
-                            <div class="option {{ old('payment_method') === 'コンビニ払い' ? 'selected' : '' }}">コンビニ払い</div>
-                            <div class="option {{ old('payment_method') === 'カード支払い' ? 'selected' : '' }}">カード支払い</div>
+                            <div class="option {{ old('payment_method') === 'コンビニ払い' ? 'selected' : '' }}" data-id="コンビニ払い">コンビニ払い</div>
+                            <div class="option {{ old('payment_method') === 'カード支払い' ? 'selected' : '' }}" data-id="カード支払い">カード支払い</div>
                         </div>
                         <input type="hidden" name="payment_method" value="{{ old('payment_method') }}">
                     </div>

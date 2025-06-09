@@ -7,26 +7,18 @@ use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 // public route
 Route::get('/', [ItemController::class, 'index'])->name('item.index');
 Route::get('/item/{item}', [ItemController::class, 'show'])->name('item.show');
 
-// non-authenticated user route
+// non-authenticated users route
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'create'])->name('register');
     Route::post('/register', [AuthController::class, 'store'])->name('register');
@@ -34,6 +26,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
+// email-verified users route
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/item/{item}/like', [LikeController::class, 'store'])->name('item.like');
@@ -51,28 +44,14 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');
     Route::post('/sell', [ExhibitionController::class, 'store'])->name('sell');
 
-    // stripe
-    Route::get('/purchase/{item}/success/', [PurchaseController::class, 'success'])->name('purchase.success');
-    Route::get('/purchase/{item}/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
 });
 
-// authenticated user route
+// authenticated users route
 Route::middleware('auth')->group(function() {
     // mail verification
-    Route::get('/email/verify', function () {
-        return view('auth.verify');
-    })->name('verification.notice');
-    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-        $request->fulfill();
-        Auth::login($request->user());
-        return redirect()->route('profile.edit');
-    })->middleware(['signed'])->name('verification.verify');
-    Route::post('/email/verification-notification', function (Request $request) {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('status', 'verification-link-sent');
-    })->middleware('throttle:6,1')->name('verification.send');
-
-   
+    Route::get('/email/verify', [EmailVerificationController::class, 'show'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
+    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
 });
 
 

@@ -9,6 +9,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -53,22 +54,29 @@ class FortifyServiceProvider extends ServiceProvider
         });
         */
 
+        /*
         Fortify::authenticateUsing(function($request) {
             $user = \App\Models\User::where('email', $request->email)->first();
 
-            if (
-                $user &&
-                Hash::check($request->password, $user->password) &&
-                $user->hasVerifiedEmail()
-            ) {
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                    throw ValidationException::withMessages([
+                        'email' => 'ログイン情報が登録されていません。',
+                    ]);
+                }
+
+                if (!$user->hasVerifiedEmail()) {
+                session([
+                    'resent_email' => $user->email
+                ]);
+                    redirect()->route('verification.notice')
+                    ->withErrors(['email' => 'メール認証が完了していません。メールをご確認ください。'])
+                    ->send();
+
+                    exit;
+                }
                 return $user;
-            }
-
-            throw ValidationException::withMessages([
-                'email' => '認証情報が正しくないか、メール認証が完了していません。'
-            ]);
-        });
-
+            });
+            */
 
 
         RateLimiter::for('login', function (Request $request) {

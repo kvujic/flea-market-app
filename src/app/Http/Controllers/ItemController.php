@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,6 +14,11 @@ class ItemController extends Controller
 
 
     public function index(Request $request) {
+
+       if (auth()->check() && !auth()->user()->hasVerifiedEmail()) {
+            Auth::logout();
+            return redirect()->route('item.index');
+        }
 
         $categories = Category::all();
 

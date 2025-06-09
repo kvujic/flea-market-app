@@ -27,9 +27,9 @@
                     <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
                 </a>
                 @elseif ($isVerificationNotice)
-                <span class="header-logo__link disabled" title="メール認証が完了していません">
+                <a href="{{ route('item.index') }}" class="header-logo__link">
                     <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-                </span>
+                </a>
                 @else
                 <a href="{{ route('item.index') }}" class="header-logo__link">
                     <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">

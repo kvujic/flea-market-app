@@ -34,13 +34,24 @@ class AuthController extends Controller
     }
 
     public function login(LoginRequest $request) {
-        if (Auth::attempt($request->validated())) {
-            $request->session()->regenerate();
-            return redirect()->route('item.index');
+        $credentials = $request->validated();
+
+        $user = User::where('email', $credentials['email'])->first();
+
+        // does not exist user or wrong password
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors(['email' => 'ユーザー情報が登録されていません。'])->withInput();
         }
 
-        return back()->withErrors([
-            'email' => 'ログイン情報が登録されていません',
-        ])->withInput();
+        // authenticated -> login
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        // unauthenticated users are redirected
+        if (!$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice')->with('status', 'メール認証が完了していません。メールをご確認ください。');
+        }
+
+        return redirect()->route('item.index');
     }
 }

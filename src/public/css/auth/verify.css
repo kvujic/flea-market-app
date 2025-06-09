@@ -30,6 +30,11 @@
     background-color: #fff;
 }
 
+.alert-danger {
+    color: #ff0000;
+    height: 20px;
+}
+
 @media screen and (max-width: 850px) {
     .verify-email__title {
         font-size: 20px;

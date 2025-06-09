@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    public function show(Item $item) {
+    public function show(Item $item)
+    {
         $user = auth()->user();
         $profile = $user->profile;
 
@@ -30,8 +31,9 @@ class PurchaseController extends Controller
     }
 
     // purchase processing
-    public function store(PurchaseRequest $request, Item $item) 
+    public function store(PurchaseRequest $request, Item $item)
     {
+        //dd($request->payment_method);
         // stripe
         if ($request->payment_method === 'カード支払い') {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -42,14 +44,23 @@ class PurchaseController extends Controller
                     'price_data' => [
                         'currency' => 'jpy',
                         'product_data' => ['name' => $item->name],
-                        'unit_amount' => $item->price, // *１円単位（１０００円＝１０００）
+                        'unit_amount' => (int) round($item->price), // *１円単位（１０００円＝１０００）
                     ],
                     'quantity' => 1,
                 ]],
+
                 'mode' => 'payment',
-                'success_url' => route('purchase.success', ['item' => $item->id]),
-                'cancel_url' => route('purchase.cancel', ['item' => $item->id]),
+                'success_url' => route('profile.index'),
+                'cancel_url' => route('item.index'),
+                'metadata' => [
+                    'user_id' => Auth::id(),
+                    'item_id' => $item->id,
+                    'shipping_postal_code' => $request->shipping_postal_code,
+                    'shipping_address' => $request->shipping_address,
+                    'shipping_building' => $request->shipping_building,
+                ]
             ]);
+            //dd($session);
 
             return redirect($session->url);
         }
@@ -81,7 +92,8 @@ class PurchaseController extends Controller
     }
 
     // address change option
-    public function edit (Item $item) {
+    public function edit(Item $item)
+    {
         $user = Auth::user();
         $profile = $user->profile;
 
@@ -94,7 +106,8 @@ class PurchaseController extends Controller
     }
 
     // address change processing
-    public function updateAddress(PurchaseRequest $request, Item $item) {
+    public function updateAddress(PurchaseRequest $request, Item $item)
+    {
         logger('updateAddress called');
         logger('Request data:', $request->all());
         logger('Item ID:', ['id' => $item->id]);
@@ -106,8 +119,7 @@ class PurchaseController extends Controller
         ]);
 
         logger('Session data set successfully');
-        
+
         return redirect()->route('purchase.purchase', ['item' => $item->id])->with('status', '住所を更新しました');
     }
 }
-
