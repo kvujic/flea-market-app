@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         // does not exist user or wrong password
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return back()->withErrors(['email' => 'ユーザー情報が登録されていません。'])->withInput();
+            return back()->withErrors(['email' => 'ログイン情報が登録されていません。'])->withInput();
         }
 
         // authenticated -> login

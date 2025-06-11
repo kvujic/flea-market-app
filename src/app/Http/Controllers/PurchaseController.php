@@ -7,6 +7,7 @@ use App\Models\Purchase;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
@@ -33,9 +34,10 @@ class PurchaseController extends Controller
     // purchase processing
     public function store(PurchaseRequest $request, Item $item)
     {
-        //dd($request->payment_method);
-        // stripe
-        if ($request->payment_method === 'カード支払い') {
+        $paymentMethod = $request->payment_method;
+
+        // stripe credit card
+        if ($paymentMethod === 'カード支払い') {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
             $session = \Stripe\Checkout\Session::create([
@@ -60,35 +62,58 @@ class PurchaseController extends Controller
                     'shipping_building' => $request->shipping_building,
                 ]
             ]);
-            //dd($session);
 
             return redirect($session->url);
         }
 
+        // convenience store
+        if ($paymentMethod === 'コンビニ払い') {
+            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        // convenience store payment
-        Purchase::create([
-            'user_id' => Auth::id(),
-            'item_id' => $item->id,
-            'payment_method' => $request->payment_method,
-            'amount' => $item->price,
-            'shipping_postal_code' => $request->shipping_postal_code,
-            'shipping_address' => $request->shipping_address,
-            'shipping_building' => $request->shipping_building,
-            'payment_date' => now(),
-            'stripe_transaction_id' => null,
-        ]);
+            try {
+                $intent = \Stripe\PaymentIntent::create([
+                    'amount' => (int) round($item->price),
+                    'currency' => 'jpy',
+                    'payment_method_types' => ['konbini'],
+                    'payment_method_data' => [
+                        'type' => 'konbini',
+                        'billing_details' => [
+                            'name' => Auth::user()->name,
+                            'email' => Auth::user()->email,
+                        ],
+                    ],
+                    'payment_method_options' => [
+                        'konbini' => [
+                            'expires_after_days' => 3,
+                        ]
+                    ],
 
-        $item->is_sold = true;
-        $item->save();
+                    'metadata' => [
+                        'user_id' => Auth::id(),
+                        'item_id' => $item->id,
+                        'shipping_postal_code' => $request->shipping_postal_code,
+                        'shipping_address' => $request->shipping_address,
+                        'shipping_building' => $request->shipping_building,
+                    ],
+                    'confirm' => true,
+                ]);
 
-        session()->forget([
-            'shipping_postal_code',
-            'shipping_address',
-            'shipping_building',
-        ]);
+                $details = $intent->next_action->konbini_display_details ?? null;
 
-        return redirect()->route('item.index')->with('status', '商品の購入が完了しました');
+                if (!$details || empty($details->hosted_voucher_url)) {
+                    return back()->withErrors(['stripe' => '支払い情報の取得に失敗しました']);
+                }
+
+                return redirect($details->hosted_voucher_url);
+
+            } catch (\Stripe\Exception\ApiErrorException $e) {
+
+                return back()->withErrors([
+                    'stripe' => '決済処理中にエラーが発生しました。',
+                ]);
+            }
+
+        }
     }
 
     // address change option

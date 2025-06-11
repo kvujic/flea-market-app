@@ -27,32 +27,70 @@ class StripeWebhookController extends Controller
             return response('Invalid signature', 400);
         }
 
-        if ($event->type === 'checkout.session.completed') {
-            $session = $event->data->object;
+        switch ($event->type) {
+            case 'checkout.session.completed':
+                $session = $event->data->object;
+                Log::info('✅ checkout.session.completed', (array) $session);
 
-            // skip if it already registered
-            if (Purchase::where('item_id', $session->metadata->item_id)->exists()) {
-                return response('Already processed', 200);
-            }
+                // skip if it already registered
+                if (Purchase::where('item_id', $session->metadata->item_id)->exists()) {
+                    return response('Already processed', 200);
+                }
 
-            // purchase registration
-            Purchase::create([
-                'user_id' => $session->metadata->user_id,
-                'item_id' => $session->metadata->item_id,
-                'payment_method' => 'カード支払い',
-                'amount' => $session->amount_total,
-                'shipping_postal_code' => $session->metadata->shipping_postal_code,
-                'shipping_address' => $session->metadata->shipping_address,
-                'shipping_building' => $session->metadata->shipping_building,
-                'stripe_transaction_id' => $session->id,
-            ]);
+                // purchase registration
+                Purchase::create([
+                    'user_id' => $session->metadata->user_id,
+                    'item_id' => $session->metadata->item_id,
+                    'payment_method' => 'カード支払い',
+                    'amount' => $session->amount_total,
+                    'shipping_postal_code' => $session->metadata->shipping_postal_code,
+                    'shipping_address' => $session->metadata->shipping_address,
+                    'shipping_building' => $session->metadata->shipping_building,
+                    'stripe_transaction_id' => $session->id,
+                ]);
 
-            $item = Item::find($session->metadata->item_id);
-            if ($item) {
-                $item->is_sold = true;
-                $item->save();
-            }
+                $item = Item::find($session->metadata->item_id);
+                if ($item) {
+                    $item->is_sold = true;
+                    $item->save();
+                }
+
+                break;
+
+            case 'payment_intent.succeeded':
+                $intent = $event->data->object;
+                Log::info('✅ payment_intent.succeeded', (array) $intent);
+
+                // check if payment_method is konbini
+                if (!empty($intent->metadata->item_id) && 
+                    !Purchase::where('item_id', $intent->metadata->item_id)->exists()) {
+
+                        Purchase::create([
+                            'user_id' => $intent->metadata->user_id,
+                            'item_id' => $intent->metadata->item_id,
+                            'payment_method' => 'コンビニ払い',
+                            'amount' => $intent->amount,
+                            'shipping_postal_code' => $intent->metadata->shipping_postal_code,
+                            'shipping_address' => $intent->metadata->shipping_address,
+                            'shipping_building' => $intent->metadata->shipping_building,
+                            'stripe_transaction_id' => $intent->id
+                        ]);
+
+                        $item = Item::find($intent->metadata->item_id);
+                        if ($item) {
+                            $item->is_sold = true;
+                            $item->save();
+                        }
+                    }
+
+                    break;
+
+            default:
+                Log::info('ℹ️ Unhandled Stripe Event: ' . $event->type);
+                break;
         }
+
         return response('Webhook handled', 200);
+
     }
 }

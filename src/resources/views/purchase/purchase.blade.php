@@ -81,6 +81,9 @@
                 <div class="purchase-group__btn">
                     <button class="purchase-form__btn-buy" type="submit">購入する</button>
                 </div>
+                @if ($errors->has('stripe'))
+                <div class="alert alert-danger">{{ $errors->first('stripe') }}</div>
+                @endif
             </div>
         </div>
     </div>
