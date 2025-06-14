@@ -15,6 +15,8 @@ class ItemController extends Controller
 
     public function index(Request $request) {
 
+        //dd($request->all());
+
        if (auth()->check() && !auth()->user()->hasVerifiedEmail()) {
             Auth::logout();
             return redirect()->route('item.index');
@@ -32,8 +34,10 @@ class ItemController extends Controller
                 return redirect()->route('login');
             }
             // get mylist of authenticated user
-            $items = auth()->user()
-            ->likedItems()
+            $items = Item::whereHas('likes', function ($q) {
+                $q->where('user_id', auth()->id());
+            })
+            ->where('user_id', '!=', auth()->id())
             ->with('categories')
             ->search($keyword)
             ->get();

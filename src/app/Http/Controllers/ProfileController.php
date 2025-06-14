@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
-use App\Models\User;
+use App\Models\Item;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -20,12 +20,21 @@ class ProfileController extends Controller
     {
         $user = auth()->user()->load('profile');
         $profile = $user->profile;
-
+        $keyword = $request->input('keyword');
         $tab = $request->input('tab');
+
         if($tab === 'buy') {
-            $items = $user->purchases()->with('item')->get()->pluck('item');
+            $items = $user->purchases()
+            ->with(['item' => function ($query) use ($keyword) {
+                $query->search($keyword);
+            }])
+            ->get()
+            ->pluck('item')
+            ->filter();
         } else {
-            $items = $user->items;
+            $items = Item::where('user_id', $user->id)
+            ->search($keyword)
+            ->get();
         }
 
         return view('mypage.profile', compact('user', 'profile', 'items'));

@@ -32,7 +32,7 @@ class ItemListTest extends TestCase
         $this->actingAs($user);
 
         $soldItem = Item::factory()->create([
-            'is_sold' => 'true',
+            'is_sold' => true,
             'name' => 'Sold Item',
         ]);
 

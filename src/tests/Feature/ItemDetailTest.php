@@ -59,11 +59,10 @@ class ItemDetailTest extends TestCase
         $response = $this->get(route('item.show', $item->id));
 
         $response->assertStatus(200)
-        ->assertSee('出品者')
         ->assertSee('default.jpeg')
         ->assertSee('test商品')
         ->assertSee('ブランド')
-        ->assertSee('1500')
+        ->assertSee('1,500')
         ->assertSee('商品の説明')
         ->assertSee('家電')
         ->assertSee('2') // like

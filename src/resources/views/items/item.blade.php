@@ -50,8 +50,14 @@
                     </div>
                 </div>
 
-                <div class="purchase-link">
+                <div class="purchase-link purchase-link__disabled">
+                    @if ($item->user_id === auth()->id())
+                    <a href="javascript:void(0);" class="purchase-btn disabled">購入手続きへ</a>
+                    @elseif ($item->is_sold)
+                    <a href="javascript:void(0);" class="purchase-btn disabled">売り切れ</a>
+                    @else
                     <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
+                    @endif
                 </div>
             </div>
 
@@ -105,11 +111,11 @@
                     @csrf
                     <div class="comment-form__group">
                         <label class="comment-form__label">商品へのコメント<label>
-                        <textarea class="comment-form__text" name="content" rows="5">{{ old('content') }}</textarea>
-                        @error('content')
-                        <div class="comment-form__error">{{ $message }}</div>
-                        @enderror
-                        <button class="comment-form__btn" type="submit">コメントを送信する</button>
+                                <textarea class="comment-form__text" name="content" rows="5">{{ old('content') }}</textarea>
+                                @error('content')
+                                <div class="comment-form__error">{{ $message }}</div>
+                                @enderror
+                                <button class="comment-form__btn" type="submit">コメントを送信する</button>
                     </div>
                 </form>
             </div>

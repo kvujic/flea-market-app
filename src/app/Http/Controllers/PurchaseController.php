@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PurchaseRequest;
+use App\Http\Requests\AddressRequest;
 use App\Models\Purchase;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
@@ -131,7 +132,7 @@ class PurchaseController extends Controller
     }
 
     // address change processing
-    public function updateAddress(PurchaseRequest $request, Item $item)
+    public function updateAddress(AddressRequest $request, Item $item)
     {
         logger('updateAddress called');
         logger('Request data:', $request->all());

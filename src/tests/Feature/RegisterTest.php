@@ -13,7 +13,7 @@ class RegisterTest extends TestCase
         $response = $this->get('/register');
 
         $response->assertStatus(200);
-        $response->assertSee('Register');
+        $response->assertSee('会員登録');
     }
 
     public function test_requires_the_name_failed() {

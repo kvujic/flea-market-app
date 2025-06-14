@@ -15,7 +15,7 @@ class LoginTest extends TestCase
         $response = $this->get('login');
 
         $response->assertStatus(200);
-        $response->assertSee('Login');
+        $response->assertSee('ログイン');
     }
 
     public function test_requires_the_email_failed() {

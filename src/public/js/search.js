@@ -7,8 +7,27 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const keyword = input.value.trim();
-            const currentUrl = new URL(window.location.href);
-            const params = new URLSearchParams(currentUrl.search);
+            const pathname = window.location.pathname;
+            const searchParams = new URLSearchParams(window.location.search);
+            //const currentUrl = new URL(window.location.href);
+
+            let redirectUrl;
+
+            if (pathname === '/' && searchParams.get('tab') === 'mylist') {
+                redirectUrl = `/?tab=mylist&keyword=${encodeURIComponent(keyword)}`;
+            } else if (pathname.startsWith('/mypage') && searchParams.get('tab') === 'sell') {
+                redirectUrl = `/mypage?tab=sell&keyword=${encodeURIComponent(keyword)}`;
+            } else if (pathname.startsWith('/mypage') && searchParams.get('tab') === 'buy') {
+                redirectUrl = `/mypage?tab=buy&keyword=${encodeURIComponent(keyword)}`;
+            } else {
+                redirectUrl = `/?keyword=${encodeURIComponent(keyword)}`;
+            }
+
+            console.log('🔁 redirecting to:', redirectUrl);
+            window.location.href = redirectUrl;
+
+
+           /* const params = new URLSearchParams(currentUrl.search);
 
             if (keyword) {
                 params.set('keyword', keyword);
@@ -17,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             currentUrl.search = params.toString();
-            window.location.href = currentUrl.toString();
+            window.location.href = currentUrl.toString(); */
         }
     });
 });

@@ -262,6 +262,10 @@
     cursor: pointer;
 }
 
+.alert-danger {
+    color: #ff0000;
+}
+
 @media screen and (max-width: 850px) {
     .purchase-inner {
         display: flex;

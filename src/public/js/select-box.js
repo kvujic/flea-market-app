@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 option.classList.add('selected');
 
                 const selectedValue = option.dataset.id;
-                selected.textContent = selectedValue;
+                const selectedLabel = option.textContent;
+
+                selected.textContent = selectedLabel;
                 hiddenInput.value = selectedValue;
 
                 //if (hiddenInput) hiddenInput.value = option.textContent.trim();

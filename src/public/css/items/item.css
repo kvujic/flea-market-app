@@ -147,6 +147,16 @@
     font-weight: bold;
 }
 
+.purchase-link__disabled {
+    background-color: #ccc;;
+}
+
+.purchase-btn.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    text-decoration: none;
+}
+
 .item-detail__title {
     font-size: 32px;
     margin-bottom: 30px;

@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Purchase;
+use App\services\PurchaseService;
 use Stripe\Webhook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class StripeWebhookController extends Controller
 {
+    protected $purchaseService;
+
+    public function __construct(PurchaseService $purchaseService)
+    {
+        $this->purchaseService = $purchaseService;
+    }
+
     public function handle(Request $request)
     {
         Log::info('🔥 Stripe Webhook Received:', $request->all());

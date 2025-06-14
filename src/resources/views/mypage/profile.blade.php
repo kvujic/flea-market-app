@@ -37,7 +37,7 @@
 <div class="profile__item-list">
     @foreach ($items as $item)
     <div class="item-card {{ $item->is_sold ? 'is_sold' : '' }}">
-        <a href="{{ $item->is_sold ? 'javascript:void(0);' : route('item.show', $item->id) }}" class="item-link">
+        <a href="{{ route('item.show', $item->id) }}" class="item-link">
             <div class="item-wrapper">
                 <img src="{{ asset('storage/' . $item->item_image) }}" alt="{{ $item->name }}" class="item-image">
             </div>
