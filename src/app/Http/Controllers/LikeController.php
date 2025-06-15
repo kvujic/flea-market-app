@@ -4,20 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Item;
-use Illuminate\Http\Request;
 
 class LikeController extends Controller
 {
-
-    /*
-    public function show(Item $item)
-{
-    $item->load(['likedUsers', 'comments', 'user', 'categories']);
-    return view('item', compact('item'));
-}
-    */
-
-
     public function store(Item $item) {
         $user = auth()->user();
 

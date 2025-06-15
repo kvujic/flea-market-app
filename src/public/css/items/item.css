@@ -148,7 +148,8 @@
 }
 
 .purchase-link__disabled {
-    background-color: #ccc;;
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .purchase-btn.disabled {

@@ -6,9 +6,7 @@ use App\Models\Item;
 use App\Models\Condition;
 use App\Models\Category;
 use App\Http\Requests\ExhibitionRequest;
-use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 
 class ExhibitionController extends Controller
 {
@@ -28,15 +26,11 @@ class ExhibitionController extends Controller
 
     public function store(ExhibitionRequest $request)
     {
-        //dd($_FILES);
 
         try {
             $validated = app(\App\Http\Requests\ExhibitionRequest::class)->validated();
 
             $image = $request->file('item_image');
-
-            //dd($image->isValid(), $image->getPathname(), $image->getClientMimeType());
-
 
 
             if (!$image) {
@@ -66,9 +60,7 @@ class ExhibitionController extends Controller
 
             $item->categories()->sync($request->categories);
 
-            //dd($item->description);
-
-            return redirect()->route('item.index');
+            return redirect()->route('item.index')->with('success', '出品が完了しました');
 
         } catch (\Exception $e) {
             return back()->withErrors(['item_image' => 'アップロードに失敗しました' . $e->getMessage()])->withInput();

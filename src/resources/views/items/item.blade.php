@@ -50,7 +50,7 @@
                     </div>
                 </div>
 
-                <div class="purchase-link purchase-link__disabled">
+                <div class="purchase-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'purchase-link__disabled' : '' }}">
                     @if ($item->user_id === auth()->id())
                     <a href="javascript:void(0);" class="purchase-btn disabled">購入手続きへ</a>
                     @elseif ($item->is_sold)

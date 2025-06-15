@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
     @yield('css')
+    @livewireStyles
 
 </head>
 
@@ -22,19 +23,19 @@
             @endphp
 
             @if (Auth::check())
-                @if (auth()->user()->hasVerifiedEmail() || $onItemShowPage)
-                <a href="{{ route('item.index') }}" class="header-logo__link">
-                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-                </a>
-                @elseif ($isVerificationNotice)
-                <a href="{{ route('item.index') }}" class="header-logo__link">
-                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-                </a>
-                @else
-                <a href="{{ route('item.index') }}" class="header-logo__link">
-                    <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-                </a>
-                @endif
+            @if (auth()->user()->hasVerifiedEmail() || $onItemShowPage)
+            <a href="{{ route('item.index') }}" class="header-logo__link">
+                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+            </a>
+            @elseif ($isVerificationNotice)
+            <a href="{{ route('item.index') }}" class="header-logo__link">
+                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+            </a>
+            @else
+            <a href="{{ route('item.index') }}" class="header-logo__link">
+                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
+            </a>
+            @endif
             @else
             <a href="{{ route('item.index') }}" class="header-logo__link">
                 <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
@@ -79,6 +80,7 @@
         @yield('js')
     </main>
 
+    @livewireScripts
     <script src="{{ asset('js/search.js') }}"></script>
     <script src="{{ asset('js/logout.js') }}"></script>
 </body>

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Purchase;
 use App\Models\Item;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PurchasesTableSeeder extends Seeder

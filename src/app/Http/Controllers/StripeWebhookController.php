@@ -20,8 +20,6 @@ class StripeWebhookController extends Controller
 
     public function handle(Request $request)
     {
-        Log::info('🔥 Stripe Webhook Received:', $request->all());
-
 
         $payload = $request->getContent();
         $sigHeader = $request->server('HTTP_STRIPE_SIGNATURE');
@@ -38,7 +36,6 @@ class StripeWebhookController extends Controller
         switch ($event->type) {
             case 'checkout.session.completed':
                 $session = $event->data->object;
-                Log::info('✅ checkout.session.completed', (array) $session);
 
                 // skip if it already registered
                 if (Purchase::where('item_id', $session->metadata->item_id)->exists()) {
@@ -67,7 +64,6 @@ class StripeWebhookController extends Controller
 
             case 'payment_intent.succeeded':
                 $intent = $event->data->object;
-                Log::info('✅ payment_intent.succeeded', (array) $intent);
 
                 // check if payment_method is konbini
                 if (!empty($intent->metadata->item_id) && 

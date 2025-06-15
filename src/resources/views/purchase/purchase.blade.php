@@ -25,14 +25,7 @@
                 <div class="line"></div>
                 <div class="purchase-group__data payment-method">
                     <h2 class="purchase-group__label">支払い方法</h2>
-                    <div class="custom-select-box">
-                        <div class="selected">{{ old('payment_method') ? old('payment_method') : '選択してください' }}</div>
-                        <div class="options">
-                            <div class="option {{ old('payment_method') === 'コンビニ払い' ? 'selected' : '' }}" data-id="コンビニ払い">コンビニ払い</div>
-                            <div class="option {{ old('payment_method') === 'カード支払い' ? 'selected' : '' }}" data-id="カード支払い">カード支払い</div>
-                        </div>
-                        <input type="hidden" name="payment_method" value="{{ old('payment_method') }}">
-                    </div>
+                    @livewire('payment-method-selector')
                 </div>
                 @error('payment_method')
                 <div class="purchase-form__error">{{ $message }}</div>
@@ -74,7 +67,7 @@
                         </tr>
                         <tr class="confirmation-table__row">
                             <th class="confirmation-table__label">支払い方法</th>
-                            <td class="confirmation-table__method" id="selected_method">{{ old('payment_method') }}</td>
+                            <td class="confirmation-table__method">@livewire('payment-summary')</td>
                         </tr>
                     </table>
                 </div>

@@ -11,12 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const optionsContainer = box.querySelector('.options');
         const optionList = box.querySelectorAll('.option');
         const hiddenInput = box.querySelector('input[type="hidden"]');
-        const selectedMethodDisplay = document.getElementById('selected_method');
 
-        if (!selected || !optionsContainer || optionList.length === 0 || !hiddenInput) return;
+        if (!selected || !optionsContainer || optionList.length === 0 || !hiddenInput) {
+            console.warn('⛔ Missing .selected or .options element');
+            return;
+        }
 
         selected.addEventListener('click', (e) => {
-            console.log('🖱️ clicked');
+            console.log('🖱️ Toggle options');
             e.stopPropagation();
             optionsContainer.classList.toggle('active');
         });
@@ -34,12 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 selected.textContent = selectedLabel;
                 hiddenInput.value = selectedValue;
 
-                //if (hiddenInput) hiddenInput.value = option.textContent.trim();
-
-                if (selectedMethodDisplay && hiddenInput.name === 'payment_method') {
-                    selectedMethodDisplay.textContent = selectedValue;
-                }
-
                 optionsContainer.classList.remove('active');
 
                 if (hiddenInput.name === 'payment_method' && option.textContent === 'カード支払い') {
@@ -48,13 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-         // click outside and close
+        // click outside and close
         document.addEventListener('click', function (e) {
             if (!box.contains(e.target)) {
+                console.log('📤 Clicked outside – closing');
                 optionsContainer.classList.remove('active');
             }
         });
-
     });
-
 });

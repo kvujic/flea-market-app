@@ -3,11 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Item;
-use App\Models\User;
-use App\Models\Condition;
-use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ItemsTableSeeder extends Seeder
 {

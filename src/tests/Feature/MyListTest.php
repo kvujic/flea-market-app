@@ -18,11 +18,11 @@ class MyListTest extends TestCase
         $otherUser = User::factory()->create();
 
         $likedItem = Item::factory()->create([
-            'name'=> 'Liked Item',
+            'name'=> 'LIKED ITEM',
             'user_id' => $otherUser->id,
         ]);
         $otherItem = Item::factory()->create([
-            'name' => 'Not Liked',
+            'name' => 'NOT LIKED',
             'user_id' => $otherUser->id,
         ]);
 
@@ -34,8 +34,8 @@ class MyListTest extends TestCase
         $response = $this->actingAs($user)->get(route('item.index', ['tab' => 'mylist']));
 
         $response->assertStatus(200);
-        $response->assertSee('Liked Item');
-        $response->assertDontSee('Not Liked');
+        $response->assertSee('LIKED ITEM');
+        $response->assertDontSeeText('NOT LIKED');
     }
 
     public function test_sold_label_is_shown_for_purchase_items()
@@ -59,8 +59,14 @@ class MyListTest extends TestCase
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
 
-        $ownItem = Item::factory()->create(['user_id' => $user->id]);
-        $likedItem = Item::factory()->create(['user_id' => $otherUser->id]);
+        $ownItem = Item::factory()->create([
+            'user_id' => $user->id,
+            'name' => 'OWN ITEM'
+        ]);
+        $likedItem = Item::factory()->create([
+            'user_id' => $otherUser->id,
+            'name' => 'LIKED ITEM'
+        ]);
 
         Like::factory()->create([
             'user_id' => $user->id,
@@ -74,8 +80,8 @@ class MyListTest extends TestCase
         $response = $this->actingAs($user)->get(route('item.index', ['tab' => 'mylist']));
 
         $response->assertStatus(200);
-        $response->assertSee($likedItem->name);
-        $response->assertDontSee($ownItem->name);
+        $response->assertSee('LIKED ITEM');
+        $response->assertDontSeeText('OWN ITEM');
     }
 
     public function test_guest_user_sees_nothing_in_mylist()
