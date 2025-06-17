@@ -7,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class ItemsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
 
@@ -22,7 +19,7 @@ class ItemsTableSeeder extends Seeder
                 'brand' => 'EMPORIO ARMANI',
                 'description' => 'スタイリッシュなデザインのメンズ腕時計',
                 'price' => 15000,
-                'is_sold' => true,
+                'is_sold' => false,
                 'condition_id' => 1,
                 'item_image' => 'images/Watch.jpg',
             ],

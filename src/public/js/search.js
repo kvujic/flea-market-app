@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const keyword = input.value.trim();
             const pathname = window.location.pathname;
             const searchParams = new URLSearchParams(window.location.search);
-            //const currentUrl = new URL(window.location.href);
 
             let redirectUrl;
 
@@ -23,20 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 redirectUrl = `/?keyword=${encodeURIComponent(keyword)}`;
             }
 
-            console.log('🔁 redirecting to:', redirectUrl);
             window.location.href = redirectUrl;
-
-
-           /* const params = new URLSearchParams(currentUrl.search);
-
-            if (keyword) {
-                params.set('keyword', keyword);
-            } else {
-                params.delete('keyword');
-            }
-
-            currentUrl.search = params.toString();
-            window.location.href = currentUrl.toString(); */
         }
     });
 });

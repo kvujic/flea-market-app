@@ -54,10 +54,6 @@
     display: none;
 }
 
-.image-control {
-   
-}
-
 .custom-file__upload {
     color: #ff5555;
     border: 2px solid #ff5555;
@@ -79,6 +75,12 @@
 
 .custom-file__upload input[type="file"] {
     display: none;
+}
+
+.upload-button-container {
+    padding: 10px 30px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .exhibition-form__error-message {

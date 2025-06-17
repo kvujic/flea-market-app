@@ -55,7 +55,7 @@ class StripeWebhookController extends Controller
                 ]);
 
                 $item = Item::find($session->metadata->item_id);
-                if ($item) {
+                if ($item && !$item->is_sold) {
                     $item->is_sold = true;
                     $item->save();
                 }
@@ -77,11 +77,12 @@ class StripeWebhookController extends Controller
                             'shipping_postal_code' => $intent->metadata->shipping_postal_code,
                             'shipping_address' => $intent->metadata->shipping_address,
                             'shipping_building' => $intent->metadata->shipping_building,
-                            'stripe_transaction_id' => $intent->id
+                            'stripe_transaction_id' => $intent->id,
+                            'payment_date' => now(),
                         ]);
 
                         $item = Item::find($intent->metadata->item_id);
-                        if ($item) {
+                        if ($item && !$item->is_sold) {
                             $item->is_sold = true;
                             $item->save();
                         }

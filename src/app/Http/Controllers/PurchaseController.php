@@ -78,7 +78,8 @@ class PurchaseController extends Controller
                         'type' => 'konbini',
                         'billing_details' => [
                             'name' => Auth::user()->name,
-                            'email' => Auth::user()->email,
+                            'email' => 'succeed_immediately@test.com',
+                            'phone' => '22222222220'
                         ],
                     ],
                     'payment_method_options' => [

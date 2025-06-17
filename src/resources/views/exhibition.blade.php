@@ -23,6 +23,7 @@
                         </label>
                     </div>
                 </div>
+                <div id="upload-button-container" class="upload-button-container"></div>
             </div>
             @error('item_image')
             <div class="exhibition-form__error-message">{{ $message }}</div>

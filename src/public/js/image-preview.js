@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('✅ image-preview.js loaded');
 
     const inputs = document.querySelectorAll('.image-input');
 
@@ -11,14 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const preview = container ? container.querySelector(previewSelector) : null;
         const label = container ? container.querySelector(labelSelector) : null;
 
-        console.log('🖼️ preview:', preview);
-        console.log('🔤 label:', label);
-
         if (!preview) return;
 
         input.addEventListener('change', function (event) {
             const file = event.target.files[0];
-            console.log('📁 選択されたファイル:', file);
 
             if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
@@ -26,6 +21,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.classList.remove('hidden');
+
+                    const uploadLabel = input.closest('label.custom-file__upload');
+                    const uploadContainer = document.getElementById('upload-button-container');
+
+                    if (uploadLabel && uploadContainer) {
+                        uploadLabel.style.position = 'static';
+                        uploadLabel.style.transform = 'none';
+                        uploadLabel.style.top = 'unset';
+                        uploadLabel.style.left = 'unset';
+
+                        uploadContainer.appendChild(uploadLabel);
+                    }
                 };
 
                 reader.readAsDataURL(file);
