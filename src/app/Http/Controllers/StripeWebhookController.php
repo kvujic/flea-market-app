@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Purchase;
 use App\services\PurchaseService;
-use Stripe\Webhook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -90,9 +89,9 @@ class StripeWebhookController extends Controller
 
                     break;
 
-            default:
-                Log::info('ℹ️ Unhandled Stripe Event: ' . $event->type);
-                break;
+            // default:
+                // Log::info('ℹ️ Unhandled Stripe Event: ' . $event->type);
+                // break;
         }
 
         return response('Webhook handled', 200);

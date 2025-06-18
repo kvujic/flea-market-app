@@ -35,7 +35,7 @@ class ExhibitionRequest extends FormRequest
             'description.max' => '商品説明は255文字以内で入力してください',
             'item_image.required' => '商品画像をアップロードしてください',
             'item_image.mimes' => '商品画像は.jpegまたは.png形式でアップロードしてください',
-            'item_image.max' => '商品画像は10MBまでの大きさでアップロードしてください',
+            'item_image.max' => '商品画像は20MBまでの大きさでアップロードしてください',
             'categories.required' => '商品のカテゴリーを選択してください',
             'condition_id.required' => '商品の状態を選択してください',
             'price.required' => '商品価格を入力してください',

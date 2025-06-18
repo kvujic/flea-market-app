@@ -6,7 +6,6 @@ use App\Http\Requests\PurchaseRequest;
 use App\Http\Requests\AddressRequest;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {

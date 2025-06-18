@@ -1,10 +1,12 @@
 # flea-market-app
 
+
 ## 概要
 ある企業が開発した独自のフリマアプリ
 
+
 ## 環境構築
-*＊Dockerビルド**
+**Dockerビルド**
 1. `git clone git@github.com:kvujic/flea-market-app.git`
 2. `cd flea-market-app`
 3. DockerDesktopアプリを立ち上げる
@@ -90,7 +92,7 @@ macOS(Homebrew):
 ```bash
 brew install stripe/stripe-cli/stripe
 ```
-> macOS以外の環境のインストール手順：
+> macOS以外の環境のインストール手順：  
 > 公式サイト：[Stripe](https://docs.stripe.com/stripe-cli)
 
 5. Webhookのテスト（Laravelプロジェクトのルートディレクトリで実行）
@@ -149,8 +151,10 @@ php artisan test --filter=テストファイル名
 
 > 各テストクラスで use refresh database; を使用しているため、テストごとに自動でマイグレーションが実行されます
 
+
 ## 動作確認時の注意事項
-- 左上のCOACHTECHロゴをクリックするとトップページへ遷移できる
+**左上のCOACHTECHロゴ**
+クリックするとトップページへ遷移することができます
 
 **Stripe決済処理**
 - カード決済時のテスト用カード番号
@@ -163,25 +167,35 @@ php artisan test --filter=テストファイル名
   国または地域：任意の国名を選択
   ```
 - コンビニ決済の場合
-  画面遷移後、PCの画面をリロードすることで支払い完了画面が表示　　
-  その後、手動で http://localhost/ またはブラウザの「戻る」ボタンでの画面遷移が必要
+  画面遷移後、PCの画面をリロードすることで支払い完了画面が表示されます  
+  その後、手動で http://localhost/ またはブラウザの「戻る」ボタンでの画面遷移が必要です
+
+  **商品画像**
+  万が一、デフォルトで登録されている商品の画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
+  ```bash
+  docker-compose exec php bash
+  php artisan images:download
+  ```
+
+
 
 ## サンプルユーザー
 
 ログインURL：http://localhost/login/
 > 認証済みユーザーです
 
-- 山田太郎（商品１−５を出品）
-  Email: taro@example.com
-  Password: password1
+- 山田太郎（商品１−５を出品）  
+  Email: taro@example.com  
+  Password: password1  
 
-- 鈴木花（商品６−10を出品）
-  Email: hana@example.com
-  Password: password2
+- 鈴木花（商品６−10を出品）  
+  Email: hana@example.com  
+  Password: password2  
 
-- 野原ひろし（商品1と4を購入済み）
-  Email: hiroshi@example.com
-  Password: password3
+- 野原ひろし（商品1と4を購入済み）  
+  Email: hiroshi@example.com  
+  Password: password3  
+
 
 ## 使用技術
 - PHP(8.4.8)
@@ -194,7 +208,8 @@ php artisan test --filter=テストファイル名
 
 
 ## ER図
-![alt](er.drawio.png)
+![art](./er.drawio.png)
+
 
 ## URL
 - 開発環境：http://localhost/
