@@ -208,7 +208,7 @@ php artisan test --filter=テストファイル名
 
 
 ## ER図
-![art](./er.drawio.png)
+![art](src/er.drawio.png)
 
 
 ## URL
