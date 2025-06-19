@@ -9,6 +9,13 @@ class PaymentSummary extends Component
 {
     public $paymentMethod = '';
 
+    /*
+    public function mount($paymentMethod = '')
+    {
+        $this->paymentMethod = $paymentMethod;
+    }
+    */
+
     #[On('setPaymentMethod')]
     public function setPaymentMethod($value)
     {

@@ -16,12 +16,10 @@
                 ? 'storage/profiles/' . $profile->profile_image
                 : 'storage/profiles/default-image.png';
                 @endphp
-
                 <img src="{{ asset($profileImagePath) }}"
                     class="edit-image__image preview-image"
                     data-default-src="{{ asset('storage/profiles/default-profile.svg') }}"
                     alt="profile_image">
-
                 <div class="image__control">
                     <label class="custom-file__upload">
                         <input type="file"

@@ -20,7 +20,6 @@
                 <h1 class="item-title">{{ $item->name }}</h1>
                 <p class="item-brand">{{ $item->brand }}</p>
                 <p class="item-price">&yen;<span class="item-price__number">{{ number_format($item->price) }}</span>（税込）</p>
-
                 <div class="item-meta">
                     {{-- like button --}}
                     @if(Auth::check())
@@ -49,7 +48,6 @@
                         <span class="comment-count">{{ $item->comments->count() }}</span>
                     </div>
                 </div>
-
                 <div class="purchase-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'purchase-link__disabled' : '' }}">
                     @if ($item->user_id === auth()->id())
                     <a href="javascript:void(0);" class="purchase-btn disabled">購入手続きへ</a>
@@ -60,7 +58,6 @@
                     @endif
                 </div>
             </div>
-
             <div class="item-data__group description">
                 <h2 class="item-detail__title">商品説明</h2>
                 <p class="item-detail__text">{!! nl2br(e($item->description)) !!}</p>
@@ -84,7 +81,6 @@
                     </tr>
                 </table>
             </div>
-
             <div class="item-data__group">
                 <h2 class="item-detail__title comment">コメント( {{ $item->comments->count() }} )</h2>
                 <div class="comment-box">
@@ -110,12 +106,12 @@
                 <form action="{{ route('item.comment', $item->id) }}" class="comment-form" method="POST">
                     @csrf
                     <div class="comment-form__group">
-                        <label class="comment-form__label">商品へのコメント<label>
-                                <textarea class="comment-form__text" name="content" rows="5">{{ old('content') }}</textarea>
-                                @error('content')
-                                <div class="comment-form__error">{{ $message }}</div>
-                                @enderror
-                                <button class="comment-form__btn" type="submit">コメントを送信する</button>
+                        <label class="comment-form__label">商品へのコメント</label>
+                        <textarea class="comment-form__text" name="content" rows="5">{{ old('content') }}</textarea>
+                        @error('content')
+                        <div class="comment-form__error">{{ $message }}</div>
+                        @enderror
+                        <button class="comment-form__btn" type="submit">コメントを送信する</button>
                     </div>
                 </form>
             </div>

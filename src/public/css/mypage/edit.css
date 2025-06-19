@@ -33,7 +33,6 @@
     display: none;
 }
 
-/* */
 .image__control {
     margin-left: 40px;
 }
@@ -65,7 +64,6 @@
 .edit-form__error {
     color: #ff0000;
     height: 20px;
-    
 }
 
 .edit-form__content {

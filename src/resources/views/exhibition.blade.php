@@ -32,18 +32,15 @@
             <div class="exhibition-item">
                 <h2 class="exhibition-item__title">商品の詳細</h2>
                 <div class="line"></div>
-
                 <div class="exhibition-item__group">
                     <label class="exhibition-item__group-label">カテゴリー</label>
                     <div class="category-list">
-
                         @php
                         $selectedCategoryIds = old('categories', $selectedCategoryIds ?? []);
                         echo "<script>
                             window.initialCategoryIds = " . json_encode($selectedCategoryIds) . ";
                         </script>"
                         @endphp
-
                         @foreach($categories as $category)
                         <div class="category-tags">
                             <div class="category-tag" data-id="{{ $category->id }}">
@@ -80,14 +77,12 @@
                         <div class="exhibition-form__error">{{ $message }}</div>
                         @enderror
                     </div>
-
                 </div>
             </div>
 
             <div class="exhibition-item__list">
                 <h2 class="exhibition-item__title">商品名と説明</h2>
                 <div class="line"></div>
-
                 <div class="exhibition-item__group-detail">
                     <label class="exhibition-item__group-label">商品名</label>
                     <input type="text" class="exhibition-item__input" name="name" value="{{ old('name') }}">
@@ -119,7 +114,6 @@
                 <div class="exhibition-form__btn">
                     <button class="exhibition-form__btn-submit" type="submit">出品する</button>
                 </div>
-
             </div>
         </form>
     </div>

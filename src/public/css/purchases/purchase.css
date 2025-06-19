@@ -69,7 +69,6 @@
 .purchase-item__title {
     font-size: 30px;
     margin-top: 0;
-
 }
 
 .purchase-item__price {
@@ -94,7 +93,7 @@
 .custom-select-box {
     position: relative;
     width: 100%;
-    max-width: 200px;
+    max-width: 300px;
     font-size: 16px;
     user-select: none;
 }
@@ -155,11 +154,11 @@
     position: relative;
 }
 
-.custom-select-box > .selected::after {
+.custom-select-box::after {
     position: absolute;
     content: '';
     top: 12px;
-    right: 10px;
+    right: 0;
     border-top: 12px solid #5f5f5f;
     border-right: 8px solid transparent;
     border-left: 8px solid transparent;

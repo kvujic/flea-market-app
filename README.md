@@ -153,8 +153,8 @@ php artisan test --filter=テストファイル名
 
 
 ## 動作確認時の注意事項
-**左上のCOACHTECHロゴ**
-クリックするとトップページへ遷移することができます
+**COACHTECHロゴ**  
+- クリックするとトップページへ遷移することができます
 
 **Stripe決済処理**
 - カード決済時のテスト用カード番号
@@ -166,15 +166,16 @@ php artisan test --filter=テストファイル名
   カード保有者の名前：任意の名前
   国または地域：任意の国名を選択
   ```
-- コンビニ決済の場合
+- コンビニ決済の場合  
   画面遷移後、PCの画面をリロードすることで支払い完了画面が表示されます  
-  その後、手動で http://localhost/ またはブラウザの「戻る」ボタンでの画面遷移が必要です
+  その後は手動で http://localhost/ またはブラウザの「戻る」ボタンでの画面遷移が必要です
 
-  **商品画像**
-  万が一、デフォルトで登録されている商品の画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
+**商品画像**  
+- 登録されているダミーデータの商品画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
   ```bash
   docker-compose exec php bash
   php artisan images:download
+  php artisan migrate:fresh --seed
   ```
 
 

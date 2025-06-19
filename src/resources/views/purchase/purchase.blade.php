@@ -31,7 +31,6 @@
                 <div class="purchase-form__error">{{ $message }}</div>
                 @enderror
                 <div class="line"></div>
-
                 <div class="purchase-group__data shipping-address">
                     <div class="shipping-address__header">
                         <h2 class="purchase-group__label">配送先</h2>
@@ -58,6 +57,7 @@
                 </div>
                 <div class="line"></div>
             </div>
+
             <div class="purchase-group">
                 <div class="purchase-group__confirmation">
                     <table class="confirmation-table">
@@ -67,7 +67,7 @@
                         </tr>
                         <tr class="confirmation-table__row">
                             <th class="confirmation-table__label">支払い方法</th>
-                            <td class="confirmation-table__method">@livewire('payment-summary')</td>
+                            @livewire('payment-summary')
                         </tr>
                     </table>
                 </div>
@@ -81,8 +81,4 @@
         </div>
     </div>
 </form>
-@endsection
-
-@section('js')
-<script src="{{ asset('js/select-box.js') }}"></script>
 @endsection

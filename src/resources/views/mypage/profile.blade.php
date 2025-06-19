@@ -7,14 +7,12 @@
 @section('content')
 <div class="profile-content">
     <div class="profile__user">
-
         <div class="profile__user-info">
             @php
             $profileImagePath = $profile && $profile->profile_image && Storage::disk('public')->exists('profiles/' . $profile->profile_image)
             ? 'storage/profiles/' . $profile->profile_image
             : 'storage/profiles/default-image.png';
             @endphp
-
             <img src="{{ asset($profileImagePath) }}" alt="profile-image" class="profile__user-image">
             <p class="profile__user-name">{{ $profile && $profile->name ? $profile->name : $user->name }}</p>
         </div>
@@ -22,15 +20,12 @@
             <a href="{{ route('profile.edit') }}" class="profile-edit__link-btn">プロフィールを編集</a>
         </div>
     </div>
-
     <div class="profile-tab__menu">
         <a href="{{ route('profile.index', array_filter(['tab' => 'sell', 'keyword' => request('keyword')])) }}" class="{{ request('tab') !== 'buy' ? 'active' : '' }}">出品した商品</a>
         <a href="{{ route('profile.index', array_filter(['tab' => 'buy', 'keyword' => request('keyword')])) }}" class="{{ request('tab') === 'buy' ? 'active' : '' }}">購入した商品</a>
     </div>
-
     <hr class="separator">
 </div>
-
 @if ($items -> isEmpty())
 <p class="item-no-list">商品がありません</p>
 @else

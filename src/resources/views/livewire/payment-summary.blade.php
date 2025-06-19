@@ -1,3 +1,3 @@
-<span id="selected_method">
+<td class="confirmation-table__method">
     {{ $paymentMethod ?: '' }}
-</span>
+</td>

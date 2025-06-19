@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="address-form">
-    <h2 class="address-form__title">住所の変更</h2>
+    <h1 class="address-form__title">住所の変更</h1>
     <div class="address-form__content">
         <form class="address-form__item" action="{{ route('purchase.address.update', ['item' => $item->id]) }}" method="POST" novalidate>
             @csrf
@@ -28,7 +28,6 @@
                 <label class="address-form__label">建物名</label>
                 <input type="text" class="address-form__input" name="shipping_building" value="{{ old('shipping_building') }}">
             </div>
-
             <div class="address-form__btn">
                 <button class="address-form__btn-submit" type="submit">更新する</button>
             </div>

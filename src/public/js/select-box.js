@@ -32,10 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 optionsContainer.classList.remove('active');
 
-                if (hiddenInput.name === 'payment_method' && option.textContent === 'カード支払い') {
-                    // ここにStrip処理を追加する
-                    // stripeボタンを表示・submitを有効化など
-                }
             });
         });
         // click outside and close
