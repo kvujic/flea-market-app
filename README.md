@@ -87,7 +87,7 @@ STRIPE_KEY=pk_test_***************
 STRIPE_SECRET=sk_test_***************
 ```
 
-4. Stripe CLIのインストール
+4. Stripe CLIのインストール（Laravelプロジェクトのルートディレクトリで実行）
 macOS(Homebrew):
 ```bash
 brew install stripe/stripe-cli/stripe
@@ -95,7 +95,7 @@ brew install stripe/stripe-cli/stripe
 > macOS以外の環境のインストール手順：  
 > 公式サイト：[Stripe](https://docs.stripe.com/stripe-cli)
 
-5. Webhookのテスト（Laravelプロジェクトのルートディレクトリで実行）
+5. Webhookのテスト
 ```bash
 stripe login
 stripe listen --forward-to http://localhost/api/stripe/webhook
@@ -105,17 +105,17 @@ stripe listen --forward-to http://localhost/api/stripe/webhook
 STRIPE_WEBHOOK_SECRET=whsec_***************
 ```
 
-> 購入処理を完了させる際に必要なため、終了しないでください
+> コマンド実行後、購入処理を完了させる際に必要なため、終了しないでください
 
 **単体テスト環境構築**
 
-1. `php artisan exec php bash`
-2. 「.env」ファイルを「.env.testing」ファイルに命名を変更
+1. `docker-compose exec php bash`
+2. 「.env」ファイルから「.env.testing」を作成
 ```bash
 cp .env .env.testing
 ```
 
-3. .env.testingに以下の環境変数を追加
+3. .env.testingの以下の環境変数を変更
 ```text
 APP_ENV=test  
 
@@ -132,16 +132,17 @@ DB_PASSWORD=root
 docker-compose exec mysql bash
 mysql -u root -p
 ```
-> パスワードは.envのMYSQL_ROOT_PASSWORDに設定されているものを入力してください
+> パスワードはdocker-compose.ymlのMYSQL_ROOT_PASSWORDに設定されているものを入力してください
 
 ```bash
 # mysqlログイン後
 CREATE DATABASE test_db;  
-exit;
+SHOW DATABASES;
 ```
 
 5. テストの実行
 ```bash
+docker-compose exec php bash
 php artisan test
 ```
 特定のテストクラスだけを実行したい場合：
