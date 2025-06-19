@@ -18,4 +18,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/docker/mysql/data
+/docker/mysql/data/
