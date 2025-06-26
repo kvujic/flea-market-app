@@ -1,6 +1,6 @@
 *
 !.gitignore
-!items/
-!items/**
+!images/
+!images/**
 !profiles/
 !profiles/**

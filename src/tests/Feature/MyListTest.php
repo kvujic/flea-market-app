@@ -12,7 +12,7 @@ class MyListTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_displays_only_liked_items()
+    public function test_it_displays_only_liked_items()
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -21,7 +21,8 @@ class MyListTest extends TestCase
             'name'=> 'LIKED ITEM',
             'user_id' => $otherUser->id,
         ]);
-        $otherItem = Item::factory()->create([
+        // other item
+        Item::factory()->create([
             'name' => 'NOT LIKED',
             'user_id' => $otherUser->id,
         ]);

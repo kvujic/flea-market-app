@@ -6,7 +6,6 @@ use App\Models\Item;
 use App\Models\Purchase;
 use App\services\PurchaseService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class StripeWebhookController extends Controller
 {
@@ -51,6 +50,7 @@ class StripeWebhookController extends Controller
                     'shipping_address' => $session->metadata->shipping_address,
                     'shipping_building' => $session->metadata->shipping_building,
                     'stripe_transaction_id' => $session->id,
+                    'payment_date' => now(),
                 ]);
 
                 $item = Item::find($session->metadata->item_id);
@@ -71,7 +71,7 @@ class StripeWebhookController extends Controller
                         Purchase::create([
                             'user_id' => $intent->metadata->user_id,
                             'item_id' => $intent->metadata->item_id,
-                            'payment_method' => 'コンビニ払い',
+                            'payment_method' => 'コンビニ支払い',
                             'amount' => $intent->amount,
                             'shipping_postal_code' => $intent->metadata->shipping_postal_code,
                             'shipping_address' => $intent->metadata->shipping_address,
@@ -88,10 +88,6 @@ class StripeWebhookController extends Controller
                     }
 
                     break;
-
-            // default:
-                // Log::info('ℹ️ Unhandled Stripe Event: ' . $event->type);
-                // break;
         }
 
         return response('Webhook handled', 200);

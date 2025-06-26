@@ -57,7 +57,6 @@
                 </div>
                 <div class="line"></div>
             </div>
-
             <div class="purchase-group">
                 <div class="purchase-group__confirmation">
                     <table class="confirmation-table">

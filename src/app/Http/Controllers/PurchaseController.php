@@ -19,7 +19,22 @@ class PurchaseController extends Controller
             return redirect()->route('profile.edit');
         }
 
+        if (!session('address_updated')) {
+            session()->forget([
+                'shipping_postal_code',
+                'shipping_address',
+                'shipping_building',
+            ]);
+        }
+
         $item->load('purchase');
+
+        $item = Item::with('purchase')->findOrFail($item->id);
+
+        if ($item->is_sold) {
+            return redirect()->route('profile.index');
+        }
+
 
         return view('purchase.purchase', [
             'item' => $item,
@@ -44,7 +59,7 @@ class PurchaseController extends Controller
                     'price_data' => [
                         'currency' => 'jpy',
                         'product_data' => ['name' => $item->name],
-                        'unit_amount' => (int) round($item->price), // *１円単位（１０００円＝１０００）
+                        'unit_amount' => (int) round($item->price),
                     ],
                     'quantity' => 1,
                 ]],
@@ -65,7 +80,7 @@ class PurchaseController extends Controller
         }
 
         // convenience store
-        if ($paymentMethod === 'コンビニ払い') {
+        if ($paymentMethod === 'コンビニ支払い') {
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
             try {
@@ -129,7 +144,6 @@ class PurchaseController extends Controller
         ]);
     }
 
-    // address change processing
     public function updateAddress(AddressRequest $request, Item $item)
     {
         logger('updateAddress called');
@@ -144,6 +158,6 @@ class PurchaseController extends Controller
 
         logger('Session data set successfully');
 
-        return redirect()->route('purchase.purchase', ['item' => $item->id])->with('status', '住所を更新しました');
+        return redirect()->route('purchase.purchase', ['item' => $item->id])->with('address_updated', true);
     }
 }

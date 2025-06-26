@@ -43,7 +43,7 @@ class ItemRegisterTest extends TestCase
             'condition_id' => $condition->id,
             'user_id' => $user->id,
         ]);
-        
+
         $item = Item::where('name', 'マルチカテゴリ商品')->first();
         Storage::disk('public')->assertExists($item->item_image);
 

@@ -28,18 +28,17 @@ function renderHiddenInputs() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // サーバー側で埋め込まれた初期値を読み込む
+    // read the initial value embedded on the sever side
     if (window.initialCategoryIds && Array.isArray(window.initialCategoryIds)) {
         window.initialCategoryIds.forEach(id => selectedCategories.add(String(id)));
     }
 
-    // 選択状態のタグに selected クラスをつけ直し
+    // re-add the selected class to the selected tag
     document.querySelectorAll('.category-tag').forEach(tag => {
         if (selectedCategories.has(tag.dataset.id)) {
             tag.classList.add('selected');
         }
 
-        // イベントリスナーを割り当て
         tag.addEventListener('click', function () {
             toggleCategory(this);
         });

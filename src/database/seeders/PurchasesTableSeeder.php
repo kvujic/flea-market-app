@@ -14,7 +14,7 @@ class PurchasesTableSeeder extends Seeder
             [
                 'user_id' => 3,
                 'item_id' => 4,
-                'payment_method' => 'コンビニ払い',
+                'payment_method' => 'コンビニ支払い',
                 'amount' => 4000,
                 'shipping_postal_code' => '105-0011',
                 'shipping_address' => '東京都港区芝公園４丁目2−８',

@@ -56,9 +56,8 @@ class ProfileController extends Controller
             if ($request->hasFile('profile_image')) {
                 $file = $request->file('profile_image');
 
-                // ファイルが正常にアップロードされているか確認
                 if ($file->isValid()) {
-                    // 既存の画像があれば削除
+                    // delete the existing image
                     if ($profile->profile_image && Storage::disk('public')->exists('profiles/' . $profile->profile_image)) {
                         Storage::disk('public')->delete('profiles/' . $profile->profile_image);
                     }
@@ -66,7 +65,6 @@ class ProfileController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $filename = uniqid() . '.' . $extension;
 
-                    // storeAsメソッドを使用して、publicディスク内のprofilesディレクトリに保存
                     $file->storeAs('profiles', $filename, 'public');
                     $validated['profile_image'] = $filename;
                 }
@@ -76,11 +74,9 @@ class ProfileController extends Controller
             $profile->user_id = $user->id;
             $profile->save();
 
-            return redirect()->route('item.index')->with('success', 'プロフィールを更新しました');
+            return redirect()->route('profile.index')->with('success', 'プロフィールを更新しました');
 
         } catch (\Exception $e) {
-        // エラーログに記録
-        \log::error('profile update failed: ' . $e->getMessage());
 
         return redirect()->back()
         ->withInput()

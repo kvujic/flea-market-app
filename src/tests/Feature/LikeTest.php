@@ -23,7 +23,6 @@ class LikeTest extends TestCase
         $response->assertStatus(200);
         self::assertStringContainsString('liked-count">0</span>', $response->getContent());
 
-        // form method POST
         $this->post(route('item.like', $item->id));
 
         // check likes table
@@ -68,7 +67,7 @@ class LikeTest extends TestCase
         ]);
 
         $response = $this->get(route('item.show', $item->id));
-        
+
         $response->assertSee('images/star.svg');
         $response->assertDontSee('images/star-color.svg');
 

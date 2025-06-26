@@ -9,27 +9,27 @@ class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_displays_the_registration_page() {
+    public function test_it_displays_the_registration_page() {
         $response = $this->get('/register');
 
         $response->assertStatus(200);
         $response->assertSee('会員登録');
     }
 
-    public function test_requires_the_name_failed() {
+    public function test_it_requires_the_name_failed() {
         $response = $this->from('/register')->post('/register', [
             'name' => '',
             'email' => 'test@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
         ]);
-        
+
         $response->assertSessionHasErrors([
             'name' => 'お名前を入力してください',
         ]);
     }
 
-    public function test_requires_the_email_failed() {
+    public function test_it_requires_the_email_failed() {
         $response = $this->from('/register')->post('/register', [
             'name' => 'Test User',
             'email' => '',
@@ -42,7 +42,7 @@ class RegisterTest extends TestCase
         ]);
     }
 
-    public function test_requires_the_password_failed() {
+    public function test_it_requires_the_password_failed() {
         $response = $this->from('/register')->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -55,7 +55,7 @@ class RegisterTest extends TestCase
         ]);
     }
 
-    public function test_must_be_at_least_8_characters_long_failed() {
+    public function test_it_must_be_at_least_8_characters_long_failed() {
         $response = $this->from('/register')->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -68,7 +68,7 @@ class RegisterTest extends TestCase
         ]);
     }
 
-    public function test_requires_password_confirmation_to_match() {
+    public function test_it_requires_password_confirmation_to_match() {
         $response = $this->from('/register')->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -81,7 +81,7 @@ class RegisterTest extends TestCase
         ]);
     }
 
-    public function test_registers_user_and_redirects_to_email_verification_page() {
+    public function test_it_registers_user_and_redirects_to_email_verification_page() {
 
         $response = $this->from('/register')->post('/register', [
             'name' => 'Test User',

@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // click outside and close
         document.addEventListener('click', function (e) {
             if (!box.contains(e.target)) {
-                console.log('📤 Clicked outside – closing');
                 optionsContainer.classList.remove('active');
             }
         });

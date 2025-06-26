@@ -24,8 +24,14 @@
     background-color: #e5e5e5;
 }
 
-.profile-edit__link {
+.profile-user__edit {
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-edit__link {
+    margin: 25px 0;
 }
 
 .profile-edit__link-btn {
@@ -39,6 +45,14 @@
     cursor: pointer;
 }
 
+.alert {
+    margin: 0 auto;
+}
+
+.alert-danger {
+    color: #ff0000;
+}
+
 .profile__user-name {
     font-size: 36px;
     font-weight: bold;
@@ -50,7 +64,7 @@
     margin-top: 40px;
 }
 
-.profile-tab__menu a {
+.profile-tab__link  {
     text-decoration: none;
     font-size: 24px;
     font-weight: bold;
@@ -58,7 +72,7 @@
     color: #5f5f5f;
 }
 
-.profile-tab__menu a.active {
+.profile-tab__link.active {
     color: #ff0000;
 }
 

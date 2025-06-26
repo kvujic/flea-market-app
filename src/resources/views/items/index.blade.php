@@ -7,8 +7,8 @@
 @section('content')
 <div class="item-content">
     <div class="tab-menu">
-        <a href="{{ route('item.index', array_filter(['tab' => 'recommended', 'keyword' => request('keyword')])) }}" class="{{ request('tab') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
-        <a href="{{ route('item.index', array_filter(['tab' => 'mylist', 'keyword' => request('keyword')])) }}" class="{{ request('tab') === 'mylist' ? 'active' : '' }}">マイリスト</a>
+        <a href="{{ route('item.index', array_filter(['tab' => 'recommended', 'keyword' => request('keyword')])) }}" class="tab-link {{ request('tab') !== 'mylist' ? 'active' : '' }}">おすすめ</a>
+        <a href="{{ route('item.index', array_filter(['tab' => 'mylist', 'keyword' => request('keyword')])) }}" class="tab-link {{ request('tab') === 'mylist' ? 'active' : '' }}">マイリスト</a>
     </div>
     <hr class="separator">
 

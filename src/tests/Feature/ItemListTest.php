@@ -11,7 +11,7 @@ class ItemListTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_fetch_all_items() {
+    public function test_it_can_fetch_all_items() {
         $items = Item::factory()->count(3)->sequence(
             ['name' => 'Guest Item 1'],
             ['name' => 'Guest Item 2'],
@@ -27,7 +27,7 @@ class ItemListTest extends TestCase
         }
     }
 
-    public function test_displays_sold_label_for_sold_items() {
+    public function test_it_displays_sold_label_for_sold_items() {
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -43,7 +43,7 @@ class ItemListTest extends TestCase
         $response->assertSee('SOLD');
     }
 
-    public function test_displays_all_items_except_my_own() {
+    public function test_it_displays_all_items_except_my_own() {
         $user = User::factory()->create();
         $this->actingAs($user);
 
@@ -54,7 +54,7 @@ class ItemListTest extends TestCase
         ]);
 
         // others
-        $otherItem = Item::factory()->create([
+        Item::factory()->create([
             'name' => 'Other Item',
         ]);
 

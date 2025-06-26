@@ -7,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class ConditionsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $conditions = [

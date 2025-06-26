@@ -54,7 +54,7 @@ class ExhibitionController extends Controller
                 'price' => $request->price,
                 'condition_id' => $request->condition_id,
                 'user_id' => auth()->id(),
-                'item_image' => "images/{$filename}", // ← ここにファイル名を保存
+                'item_image' => "images/{$filename}",
                 'is_sold' => false,
             ]);
 

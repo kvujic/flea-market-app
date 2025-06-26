@@ -12,11 +12,11 @@
 3. DockerDesktopアプリを立ち上げる
 4. `docker-compose up -d --build`
 
-> *MacのM1・M2チップのPCの場合、`no matching manifest for linux/arm64/v8 in the manifest list entries`のメッセージが表示されビルドができないことがあります。
-エラーが発生する場合は、docker-compose.ymlファイルの「mysql」内に「platform」の項目を追加で記載してください*
+> *MacのM1・M2チップのPC対応となっています。
+エラーが発生する場合は、docker-compose.ymlファイル内の全ての「platform」の項目をご自身のPCに合わせて編集してください*
 ``` bash
 mysql:
-    platform: linux/x86_64(この文追加)
+    platform: linux/amd64(この部分)
     image: mysql:8.0.26
     environment:
 ```
@@ -87,7 +87,7 @@ STRIPE_KEY=pk_test_***************
 STRIPE_SECRET=sk_test_***************
 ```
 
-4. Stripe CLIのインストール（Laravelプロジェクトのルートディレクトリで実行）
+4. Stripe CLIのインストール（Laravelプロジェクトのルートディレクトリで実行）  
 macOS(Homebrew):
 ```bash
 brew install stripe/stripe-cli/stripe

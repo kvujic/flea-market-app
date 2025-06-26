@@ -73,13 +73,13 @@
     opacity: 0.7;
 }
 
-.custom-file__upload input[type="file"] {
+.image-input {
     display: none;
 }
 
 .upload-button-container {
     padding: 10px 30px;
-    margin-top: 20px;
+    margin-top: 8px;
     text-align: center;
 }
 

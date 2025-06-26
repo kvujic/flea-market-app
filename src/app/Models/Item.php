@@ -19,13 +19,11 @@ class Item extends Model
         'item_image',
     ];
 
-
     // one-to-one relationship (parent)
     public function purchase()
     {
         return $this->hasOne(Purchase::class);
     }
-
 
     // one-to-many relationship (child)
     public function user()

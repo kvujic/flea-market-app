@@ -15,31 +15,9 @@
 <body>
     <header class="header">
         <div class="header-inner">
-
-            @php
-            $onItemShowPage = Request::routeIs('item.show');
-            $isVerificationNotice = Request::routeIs('verification.notice')
-            @endphp
-
-            @if (Auth::check())
-            @if (auth()->user()->hasVerifiedEmail() || $onItemShowPage)
             <a href="{{ route('item.index') }}" class="header-logo__link">
                 <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </a>
-            @elseif ($isVerificationNotice)
-            <a href="{{ route('item.index') }}" class="header-logo__link">
-                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-            </a>
-            @else
-            <a href="{{ route('item.index') }}" class="header-logo__link">
-                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-            </a>
-            @endif
-            @else
-            <a href="{{ route('item.index') }}" class="header-logo__link">
-                <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
-            </a>
-            @endif
             @if (!Request::is('register') && !Request::is('login') && !Request::is('email/verify'))
             <div class="search-form">
                 <div class="search-form__form">
@@ -61,7 +39,6 @@
                         <a href="{{ route('login') }}" class="header-nav__link login">ログイン</a>
                     </li>
                     @endif
-
                     <li class="header-nav__item">
                         <a href="{{ route('profile.index') }}" class="header-nav__link mypage">マイページ</a>
                     </li>

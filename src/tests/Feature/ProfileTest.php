@@ -7,8 +7,6 @@ use App\Models\Item;
 use App\Models\Profile;
 use App\Models\Purchase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase

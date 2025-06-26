@@ -22,7 +22,6 @@ class ItemController extends Controller
         $tab = $request->query('tab', 'recommended');
         $keyword = $request->input('keyword');
 
-        
         if ($tab === 'mylist') {
             // in case of non-authentication
             if(!auth()->check()) {

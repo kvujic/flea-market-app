@@ -15,11 +15,13 @@
                 @endif
             </div>
         </div>
+
         <div class="item-data">
             <div class="item-data__group">
                 <h1 class="item-title">{{ $item->name }}</h1>
                 <p class="item-brand">{{ $item->brand }}</p>
                 <p class="item-price">&yen;<span class="item-price__number">{{ number_format($item->price) }}</span>（税込）</p>
+
                 <div class="item-meta">
                     {{-- like button --}}
                     @if(Auth::check())
@@ -27,41 +29,45 @@
                         @csrf
                         <button class="icon-like" type="submit">
                             @if (auth()->check() && auth()->user()->likedItems()->where('item_id', $item->id)->exists())
-                            <img src="{{ asset('images/star-color.svg') }}" alt="liked" class="icon-like__img">
+                            <img src="{{ asset('images/star-color.svg') }}" alt="liked" class="icon-like__image">
                             @else
-                            <img src="{{ asset('images/star.svg') }}" alt="like" class="icon-like__img">
+                            <img src="{{ asset('images/star.svg') }}" alt="like" class="icon-like__image">
                             @endif
                             <span class="liked-count">{{ $item->likedByUsers->count() }}</span>
                         </button>
                     </form>
                     @else
-                    <div class="icon icon-disabled">
+                    <div class="icon-disabled">
                         <a href="{{ route('login') }}" class="icon-like">
                             <img src="{{ asset('images/star.svg') }}" alt="liked" class="icon-like__image">
                             <span class="liked-count">{{ $item->likedByUsers->count() }}</span>
                         </a>
                     </div>
                     @endif
+
                     {{-- comment count display --}}
                     <div class="icon-comment">
                         <img src="{{ asset('images/chat-bubble.svg') }}" alt="comment" class="icon-comment__image">
                         <span class="comment-count">{{ $item->comments->count() }}</span>
                     </div>
                 </div>
+
                 <div class="purchase-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'purchase-link__disabled' : '' }}">
                     @if ($item->user_id === auth()->id())
-                    <a href="javascript:void(0);" class="purchase-btn disabled">購入手続きへ</a>
+                    <button class="purchase-btn disabled" disabled>購入手続きへ</button>
                     @elseif ($item->is_sold)
-                    <a href="javascript:void(0);" class="purchase-btn disabled">売り切れ</a>
+                    <button class="purchase-btn disabled" disabled>売り切れ</button>
                     @else
                     <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
                     @endif
                 </div>
             </div>
+
             <div class="item-data__group description">
                 <h2 class="item-detail__title">商品説明</h2>
                 <p class="item-detail__text">{!! nl2br(e($item->description)) !!}</p>
             </div>
+
             <div class="item-data__group info">
                 <h2 class="item-detail__title">商品の情報</h2>
                 <table class="item-detail__table">
@@ -81,6 +87,7 @@
                     </tr>
                 </table>
             </div>
+
             <div class="item-data__group">
                 <h2 class="item-detail__title comment">コメント( {{ $item->comments->count() }} )</h2>
                 <div class="comment-box">

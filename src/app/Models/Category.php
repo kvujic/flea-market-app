@@ -13,7 +13,6 @@ class Category extends Model
         'category'
     ];
 
-
     // many-to-many relationship
     public function items() {
         return $this->belongsToMany(Item::class);

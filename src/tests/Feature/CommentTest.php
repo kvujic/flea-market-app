@@ -4,9 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Item;
-use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CommentTest extends TestCase
@@ -77,5 +75,4 @@ class CommentTest extends TestCase
             'content' => 'コメントは255文字以内で入力してください'
         ]);
     }
-    
 }

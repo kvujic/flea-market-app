@@ -40,7 +40,7 @@ class ShippingAddressTest extends TestCase
         $response->assertSee('大阪府堺市１−１');
         $response->assertSee('test building');
     }
-    
+
     public function test_shipping_address_saved_with_purchase()
     {
         $user = User::factory()->create();

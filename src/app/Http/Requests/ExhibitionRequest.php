@@ -8,13 +8,12 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ExhibitionRequest extends FormRequest
 {
-    
+
     public function authorize(): bool
     {
         return true;
     }
 
-    
     public function rules(): array
     {
         return [

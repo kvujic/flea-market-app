@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ConditionFactory extends Factory
 {
-    
+
     public function definition(): array
     {
         return [

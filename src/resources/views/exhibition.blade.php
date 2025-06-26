@@ -16,7 +16,7 @@
                     <div class="image-wrapper">
                         <img src="" class="image-upload__preview preview-image hidden" data-default-src="" alt="item_image">
                     </div>
-                    <div class="image__control">
+                    <div class="image-control">
                         <label class="custom-file__upload">
                             <input type="file" class="image-input" name="item_image" accept="image/*" data-preview-target=".preview-image" data-label-target=".image-label">
                             <span class="image-label">画像を選択する</span>

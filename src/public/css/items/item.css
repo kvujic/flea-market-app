@@ -153,6 +153,8 @@
 }
 
 .purchase-btn.disabled {
+    border: none;
+    background-color: #ccc;
     pointer-events: none;
     cursor: not-allowed;
     text-decoration: none;
@@ -294,13 +296,21 @@
     margin: 0 10px;
 }
 
-.pagination span {
+.pagination-link.current {
     width: 20px;
     height: 20px;
     margin: 0 10px;
+    padding: 5px 10px;
+    cursor: default;
 }
 
-.pagination a {
+.pagination-dots {
+    width: 20px;
+    height: 20px;
+    padding: 5px 10px;
+}
+
+.pagination-link {
     text-decoration: none;
     color: #333;
 }

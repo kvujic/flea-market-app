@@ -13,19 +13,18 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    
+
     public function register(): void
     {
         //
     }
 
-    
+
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
-    
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
 
+        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
 
         Fortify::registerView(function () {
             return view('auth.register');
@@ -34,7 +33,6 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return view('auth.login');
         });
-
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());

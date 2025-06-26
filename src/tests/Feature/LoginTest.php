@@ -11,14 +11,14 @@ class LoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_displays_the_login_page() {
+    public function test_it_displays_the_login_page() {
         $response = $this->get('login');
 
         $response->assertStatus(200);
         $response->assertSee('ログイン');
     }
 
-    public function test_requires_the_email_failed() {
+    public function test_it_requires_the_email_failed() {
         $response = $this->from('/login')->post('login', [
             'email' => '',
             'password' => 'password123',
@@ -29,7 +29,7 @@ class LoginTest extends TestCase
         ]);
     }
 
-    public function test_requires_the_password_failed() {
+    public function test_it_requires_the_password_failed() {
         $response = $this->from('/login')->post('/login', [
             'email' => 'test@example.com',
             'password' => '',
@@ -51,7 +51,7 @@ class LoginTest extends TestCase
         ]);
     }
 
-    public function test_authenticates_the_user_with_correct_credentials() {
+    public function test_it_authenticates_the_user_with_correct_credentials() {
         $user = User::factory()->create([
             'email' => 'test@example.com',
             'password' => Hash::make('password123'),
