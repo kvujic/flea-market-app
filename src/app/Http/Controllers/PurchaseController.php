@@ -122,9 +122,7 @@ class PurchaseController extends Controller
 
             } catch (\Stripe\Exception\ApiErrorException $e) {
 
-                return back()->withErrors([
-                    'stripe' => '決済処理中にエラーが発生しました。',
-                ]);
+                return back();
             }
 
         }

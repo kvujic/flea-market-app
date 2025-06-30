@@ -20,12 +20,6 @@
             <div class="profile-edit__link">
                 <a href="{{ route('profile.edit') }}" class="profile-edit__link-btn">プロフィールを編集</a>
             </div>
-            @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
-            @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
         </div>
     </div>
     <div class="profile-tab__menu">

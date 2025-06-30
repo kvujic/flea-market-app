@@ -1,4 +1,4 @@
-# flea-market-app
+# coachtechフリマ
 
 
 ## 概要
@@ -12,19 +12,25 @@
 3. DockerDesktopアプリを立ち上げる
 4. `docker-compose up -d --build`
 
-> *MacのM1・M2チップのPC対応となっています。
-エラーが発生する場合は、docker-compose.ymlファイル内の全ての「platform」の項目をご自身のPCに合わせて編集してください*
+> ※ Apple Silicon (M1/M2) を使用している場合、docker-compose.yml の mysql, phpMyAdmin, MailHogなどで`platform: linux/amd64` の設定が必要になることがあります。
+
 ``` bash
 mysql:
-    platform: linux/amd64(この部分)
+    platform: linux/amd64
     image: mysql:8.0.26
     environment:
 ```
 
 **Laravel環境構築**
 
-1. `docker-compose exec php bash`
-2. `composer install`
+1. PHPコンテナに入る
+```bash
+docker-compose exec php bash
+```
+2. パッケージをインストール
+```bash
+composer install
+```
 3. 「.env.example」ファイルを「.env」ファイルに命名を変更。または、新しく.envファイルを作成
 ```bash
 cp .env.example .env
@@ -38,17 +44,8 @@ DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
-
-# メール設定（MailHog）
-MAIL_MAILER=smtp
-MAIL_HOST=mailhog
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
 ```
+
 6. アプリケーションキーの作成
 ```bash
 php artisan key:generate
@@ -69,12 +66,33 @@ php artisan migrate
 php artisan db:seed
 ```
 
-**Stripeの環境構築**
+### MailHog（開発用メール確認）  
+開発環境では、MailHogを使用してメールの送信内容をブラウザ上で確認できます  
+SMTPサーバーとして動作し、実際には送信せず、UI上で内容をチェックできるツールです  
+
+1. .envに以下を追記
+```text
+# メール設定（MailHog）
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+2. ブラウザでアクセス  
+http://localhost:8025
+> 会員登録後に表示されるページ内の「認証はこちらから」をクリックすると上記URLにアクセスできます
+
+
+### Stripeの環境構築
 
 1. Stripeアカウントを作成（必須）
 > 公式サイト：[Stripe](https://dashboard.stripe.com)
 
-2. Stripe PHPライブラリのインストール
+2. Stripe PHP SDK のインストール（PHPコンテナ内で実行）
 ```bash
 docker-compose exec php bash
 composer require stripe/stripe-php
@@ -87,15 +105,15 @@ STRIPE_KEY=pk_test_***************
 STRIPE_SECRET=sk_test_***************
 ```
 
-4. Stripe CLIのインストール（Laravelプロジェクトのルートディレクトリで実行）  
-macOS(Homebrew):
+4. Stripe CLIのインストール（ホストPC上で実行）  
 ```bash
+# macOS(Homebrew)
 brew install stripe/stripe-cli/stripe
 ```
-> macOS以外の環境のインストール手順：  
+> macOS以外の環境のインストール手順は、下記の公式ページを参照してください  
 > 公式サイト：[Stripe](https://docs.stripe.com/stripe-cli)
 
-5. Webhookのテスト
+5. Webhook起動
 ```bash
 stripe login
 stripe listen --forward-to http://localhost/api/stripe/webhook
@@ -105,9 +123,9 @@ stripe listen --forward-to http://localhost/api/stripe/webhook
 STRIPE_WEBHOOK_SECRET=whsec_***************
 ```
 
-> コマンド実行後、購入処理を完了させる際に必要なため、終了しないでください
+> コマンド実行後、購入処理を完了させる際に必要なため、Webhook起動中は終了しないでください
 
-**単体テスト環境構築**
+### 単体テスト環境構築
 
 1. `docker-compose exec php bash`
 2. 「.env」ファイルから「.env.testing」を作成
@@ -134,8 +152,7 @@ mysql -u root -p
 ```
 > パスワードはdocker-compose.ymlのMYSQL_ROOT_PASSWORDに設定されているものを入力してください
 
-```bash
-# mysqlログイン後
+```sql
 CREATE DATABASE test_db;  
 SHOW DATABASES;
 ```
@@ -167,19 +184,17 @@ php artisan test --filter=テストファイル名
   カード保有者の名前：任意の名前
   国または地域：任意の国名を選択
   ```
-- コンビニ決済の場合  
+- コンビニ決済  
   画面遷移後、PCの画面をリロードすることで支払い完了画面が表示されます  
-  その後は手動で http://localhost/ またはブラウザの「戻る」ボタンでの画面遷移が必要です
+  その後は手動で http://localhost/ への画面遷移が必要です
 
 **商品画像**  
-- 登録されているダミーデータの商品画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
+- ダミーデータの商品画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
   ```bash
   docker-compose exec php bash
   php artisan images:download
   php artisan migrate:fresh --seed
   ```
-
-
 
 ## サンプルユーザー
 

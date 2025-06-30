@@ -74,13 +74,12 @@ class ProfileController extends Controller
             $profile->user_id = $user->id;
             $profile->save();
 
-            return redirect()->route('profile.index')->with('success', 'プロフィールを更新しました');
+            return redirect()->route('item.index');
 
         } catch (\Exception $e) {
 
         return redirect()->back()
-        ->withInput()
-        ->with('error', 'プロフィールの更新に失敗しました');
+        ->withInput();
         }
     }
 }

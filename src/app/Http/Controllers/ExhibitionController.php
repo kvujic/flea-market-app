@@ -26,22 +26,18 @@ class ExhibitionController extends Controller
 
     public function store(ExhibitionRequest $request)
     {
-
-        try {
-            $validated = app(\App\Http\Requests\ExhibitionRequest::class)->validated();
-
             $image = $request->file('item_image');
 
 
             if (!$image) {
-                throw new \Exception('ファイル形式が正しくないか、アップロードに失敗しました。商品画像は.jpegまたは.png形式でアップロードしてください');
+                return back();
             }
 
             // mimes type check
             $allowedMimeTypes = ['image/jpeg', 'image/png'];
             $mimeType = $image->getMimeType();
             if (!in_array($mimeType, $allowedMimeTypes)) {
-                throw new \Exception("対応していない画像形式です{{$mimeType}}。.jpegまたは.png形式でアップロードしてください。");
+                return back();
             }
 
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
@@ -60,11 +56,7 @@ class ExhibitionController extends Controller
 
             $item->categories()->sync($request->categories);
 
-            return redirect()->route('item.index')->with('success', '出品が完了しました');
-
-        } catch (\Exception $e) {
-            return back()->withErrors(['item_image' => 'アップロードに失敗しました' . $e->getMessage()])->withInput();
-        }
+            return redirect()->route('item.index');
     }
 }
 

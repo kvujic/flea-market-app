@@ -99,7 +99,7 @@
                         @if ($comment->user->profile && $comment->user->profile->profile_image)
                         <img src="{{ asset('storage/profiles/' . $comment->user->profile->profile_image) }}" alt="profile-image" class="comment-user__image">
                         @else
-                        <img src="{{ asset('storage/profiles/default-profile.svg') }}" alt="default-image" class="comment-user__image">
+                        <img src="{{ asset('storage/profiles/default-image.png') }}" alt="default-image" class="comment-user__image">
                         @endif
                         <p class="comment-user__name">{{ $comment->user->name }}</p>
                     </div>
