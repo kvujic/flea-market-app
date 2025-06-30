@@ -1,43 +1,50 @@
-# coachtechフリマ
-
+# coachtech フリマ
 
 ## 概要
+
 ある企業が開発した独自のフリマアプリ
 
-
 ## 環境構築
-**Dockerビルド**
+
+**Docker ビルド**
+
 1. `git clone git@github.com:kvujic/flea-market-app.git`
 2. `cd flea-market-app`
-3. DockerDesktopアプリを立ち上げる
+3. DockerDesktop アプリを立ち上げる
 4. `docker-compose up -d --build`
 
-> ※ Apple Silicon (M1/M2) を使用している場合、docker-compose.yml の mysql, phpMyAdmin, MailHogなどで`platform: linux/amd64` の設定が必要になることがあります。
+> ※ Apple Silicon (M1/M2) を使用している場合、docker-compose.yml の mysql, phpMyAdmin, MailHog などで`platform: linux/amd64` の設定が必要になることがあります。
 
-``` bash
+```bash
 mysql:
     platform: linux/amd64
     image: mysql:8.0.26
     environment:
 ```
 
-**Laravel環境構築**
+**Laravel 環境構築**
 
-1. PHPコンテナに入る
+1. PHP コンテナに入る
+
 ```bash
 docker-compose exec php bash
 ```
+
 2. パッケージをインストール
+
 ```bash
 composer install
 ```
-3. 「.env.example」ファイルを「.env」ファイルに命名を変更。または、新しく.envファイルを作成
+
+3. 「.env.example」ファイルを「.env」ファイルに命名を変更。または、新しく.env ファイルを作成
+
 ```bash
 cp .env.example .env
 ```
-4. .envに以下の環境変数を追加
-``` text
-#データベース設定
+
+4. .env に以下の環境変数を設定
+
+```text
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -47,32 +54,37 @@ DB_PASSWORD=laravel_pass
 ```
 
 6. アプリケーションキーの作成
+
 ```bash
 php artisan key:generate
 ```
 
 7. 画像表示のためのシンボリックリンクの設定
+
 ```bash
 php artisan storage:link
 ```
 
 8. マイグレーションの実行
+
 ```bash
 php artisan migrate
 ```
 
 9. シーディングの実行
+
 ```bash
 php artisan db:seed
 ```
 
-### MailHog（開発用メール確認）  
-開発環境では、MailHogを使用してメールの送信内容をブラウザ上で確認できます  
-SMTPサーバーとして動作し、実際には送信せず、UI上で内容をチェックできるツールです  
+### MailHog（開発用メール確認）
 
-1. .envに以下を追記
+開発環境では、MailHog を使用してメールの送信内容をブラウザ上で確認できます  
+SMTP サーバーとして動作し、実際には送信せず、UI 上で内容をチェックできるツールです
+
+1. .env に以下を追記
+
 ```text
-# メール設定（MailHog）
 MAIL_MAILER=smtp
 MAIL_HOST=mailhog
 MAIL_PORT=1025
@@ -82,60 +94,70 @@ MAIL_ENCRYPTION=null
 MAIL_FROM_ADDRESS="hello@example.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
+
 2. ブラウザでアクセス  
-http://localhost:8025
-> 会員登録後に表示されるページ内の「認証はこちらから」をクリックすると上記URLにアクセスできます
+   http://localhost:8025
+   > 会員登録後に表示されるページ内の「認証はこちらから」をクリックすると上記 URL にアクセスできます
 
+### Stripe の環境構築
 
-### Stripeの環境構築
+1. Stripe アカウントを作成（必須）
 
-1. Stripeアカウントを作成（必須）
-> 公式サイト：[Stripe](https://dashboard.stripe.com)
+   > 公式サイト：[Stripe](https://dashboard.stripe.com)
 
-2. Stripe PHP SDK のインストール（PHPコンテナ内で実行）
+2. Stripe PHP SDK のインストール（PHP コンテナ内で実行）
+
 ```bash
 docker-compose exec php bash
 composer require stripe/stripe-php
 ```
 
-3. ダッシュボードにログイン後、「開発者」→ 「APIキー」でテストキーを取得
-> 取得した「公開可能キー」と「シークレットキー」を.envファイルに追加
+3. ダッシュボードにログイン後、「開発者」→ 「API キー」でテストキーを取得
+4. 取得した「公開可能キー」と「シークレットキー」を.env ファイルに設定
+
 ```text
 STRIPE_KEY=pk_test_***************
 STRIPE_SECRET=sk_test_***************
 ```
 
-4. Stripe CLIのインストール（ホストPC上で実行）  
+5. Stripe CLI のインストール（ホスト PC 上で実行）
+
 ```bash
 # macOS(Homebrew)
 brew install stripe/stripe-cli/stripe
 ```
-> macOS以外の環境のインストール手順は、下記の公式ページを参照してください  
+
+> macOS 以外の環境のインストール手順は、下記の公式ページを参照してください  
 > 公式サイト：[Stripe](https://docs.stripe.com/stripe-cli)
 
-5. Webhook起動
+6. Webhook 起動
+
 ```bash
 stripe login
 stripe listen --forward-to http://localhost/api/stripe/webhook
 ```
-> コマンドを実行した際に取得できるwebhookのシークレットキーを.envファイルに追加
+
+7. コマンドを実行した際に取得できる webhook のシークレットキーを.env ファイルに設定
+
 ```text
 STRIPE_WEBHOOK_SECRET=whsec_***************
 ```
 
-> コマンド実行後、購入処理を完了させる際に必要なため、Webhook起動中は終了しないでください
+> コマンド実行後、購入処理を完了させる際に必要なため、Webhook 起動中は終了しないでください
 
 ### 単体テスト環境構築
 
 1. `docker-compose exec php bash`
 2. 「.env」ファイルから「.env.testing」を作成
+
 ```bash
 cp .env .env.testing
 ```
 
-3. .env.testingの以下の環境変数を変更
+3. .env.testing の以下の環境変数を変更
+
 ```text
-APP_ENV=test  
+APP_ENV=test
 
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -146,35 +168,42 @@ DB_PASSWORD=root
 ```
 
 4. テスト用データベースの作成
+
 ```bash
 docker-compose exec mysql bash
 mysql -u root -p
 ```
-> パスワードはdocker-compose.ymlのMYSQL_ROOT_PASSWORDに設定されているものを入力してください
+
+> パスワードは docker-compose.yml の MYSQL_ROOT_PASSWORD に設定されているものを入力してください
 
 ```sql
-CREATE DATABASE test_db;  
+CREATE DATABASE test_db;
 SHOW DATABASES;
 ```
 
 5. テストの実行
+
 ```bash
 docker-compose exec php bash
 php artisan test
 ```
+
 特定のテストクラスだけを実行したい場合：
+
 ```bash
 php artisan test --filter=テストファイル名
 ```
 
 > 各テストクラスで use refresh database; を使用しているため、テストごとに自動でマイグレーションが実行されます
 
-
 ## 動作確認時の注意事項
-**COACHTECHロゴ**  
+
+**COACHTECH ロゴ**
+
 - クリックするとトップページへ遷移することができます
 
-**Stripe決済処理**
+**Stripe 決済処理**
+
 - カード決済時のテスト用カード番号
   ```text
   メールアドレス：任意のメールアドレス
@@ -185,10 +214,11 @@ php artisan test --filter=テストファイル名
   国または地域：任意の国名を選択
   ```
 - コンビニ決済  
-  画面遷移後、PCの画面をリロードすることで支払い完了画面が表示されます  
+  画面遷移後、PC の画面をリロードすることで支払い完了画面が表示されます  
   その後は手動で http://localhost/ への画面遷移が必要です
 
-**商品画像**  
+**商品画像**
+
 - ダミーデータの商品画像が表示されない場合（storage/app/public/images/内に画像がない場合）は以下のコマンドを実行してください
   ```bash
   docker-compose exec php bash
@@ -198,23 +228,24 @@ php artisan test --filter=テストファイル名
 
 ## サンプルユーザー
 
-ログインURL：http://localhost/login/
+ログイン URL：http://localhost/login/
+
 > 認証済みユーザーです
 
-- 山田太郎（商品１−５を出品）  
+- 山田太郎（商品１ − ５を出品）  
   Email: taro@example.com  
-  Password: password1  
+  Password: password1
 
-- 鈴木花（商品６−10を出品）  
+- 鈴木花（商品６ −10 を出品）  
   Email: hana@example.com  
-  Password: password2  
+  Password: password2
 
-- 野原ひろし（商品1と4を購入済み）  
+- 野原ひろし（商品 1 と 4 を購入済み）  
   Email: hiroshi@example.com  
-  Password: password3  
-
+  Password: password3
 
 ## 使用技術
+
 - PHP(8.4.8)
 - Laravel(10.48.29)
 - Livewire(3.6.3)
@@ -222,13 +253,14 @@ php artisan test --filter=テストファイル名
 - Fortify(1.25.4)
 - Stripe(17.3)
 - MailHog(latest)
+- JavaScript(カテゴリ選択・画像プレビュー・検索など一部の画面操作に使用)
 
+## ER 図
 
-## ER図
 ![art](src/er.drawio.png)
 
-
 ## URL
+
 - 開発環境：http://localhost/
 - phpMyAdmin：http://localhost:8080/
 - MailHog：http://localhost:8025/
