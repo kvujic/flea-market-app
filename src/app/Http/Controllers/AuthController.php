@@ -48,7 +48,7 @@ class AuthController extends Controller
 
         // unauthenticated users are redirected
         if (!$user->hasVerifiedEmail()) {
-            return redirect()->route('verification.notice')->with('status', 'メール認証が完了していません。メールをご確認ください。');
+            return redirect()->route('verification.notice');
         }
 
         return redirect()->route('item.index');

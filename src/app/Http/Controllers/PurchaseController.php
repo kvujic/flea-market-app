@@ -115,7 +115,7 @@ class PurchaseController extends Controller
                 $details = $intent->next_action->konbini_display_details ?? null;
 
                 if (!$details || empty($details->hosted_voucher_url)) {
-                    return back()->withErrors(['stripe' => '支払い情報の取得に失敗しました']);
+                    return back();
                 }
 
                 return redirect($details->hosted_voucher_url);
