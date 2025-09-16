@@ -21,11 +21,12 @@ class ItemController extends Controller
 
         $tab = $request->query('tab', 'recommended');
         $keyword = $request->input('keyword');
+        $items = collect();
 
         if ($tab === 'mylist') {
             // in case of non-authentication
-            if(!auth()->check()) {
-                return redirect()->route('login');
+            if(!auth()->check() || !auth()->user()->hasVerifiedEmail()) {
+                return view('items.index', compact('items', 'tab', 'categories'));
             }
             // get mylist of authenticated user
             $items = Item::whereHas('likes', function ($q) {
@@ -35,16 +36,16 @@ class ItemController extends Controller
             ->with('categories')
             ->search($keyword)
             ->get();
-        }else{
-            // get recommended items
-            $query = Item::with('categories')
-            ->search($keyword);
-            // exclude seller's items
-            if (auth()->check()) {
-                $query->where('user_id', '!=', auth()->id());
-            }
-            $items = $query->get();
+
+            return view('items.index', compact('items', 'tab', 'categories'));
         }
+            // get recommended items
+        $query = Item::with('categories')->search($keyword);
+            // exclude seller's items
+        if (auth()->check()) {
+            $query->where('user_id', '!=', auth()->id());
+        }
+        $items = $query->get();
 
         return view('items.index', compact('items', 'tab', 'categories'));
     }

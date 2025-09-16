@@ -13,7 +13,9 @@
     <hr class="separator">
 
     @if ($items -> isEmpty())
+    @auth
     <p class="item-no-list">商品がありません</p>
+    @endauth
     @else
     <div class="item-list">
         @foreach ($items as $item)
