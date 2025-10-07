@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Transaction;
 
 class Item extends Model
 {
@@ -51,6 +52,17 @@ class Item extends Model
         return $this->relationLoaded('purchase')
             ? $this->getRelation('purchase')
             : $this->purchase()->first();
+    }
+
+    public function chats() {
+        return $this->hasManyThrough(
+            Chat::class,
+            Transaction::class,
+            'item_id',
+            'transaction_id',
+            'id', // items
+            'id', // transactions
+        );
     }
 
     // one-to-many relationship (child)

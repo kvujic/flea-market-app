@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Models\Item;
+use App\Models\Chat;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,21 +23,49 @@ class ProfileController extends Controller
         $keyword = $request->input('keyword');
         $tab = $request->input('tab');
 
+        $unreadTxnCount = Chat::query()
+            ->whereHas('transaction', function($chatQuery) use ($user) {
+                $chatQuery->where(function ($roleQuery) use ($user) {
+                    $roleQuery->where('buyer_id', $user->id)
+                        ->orWhere('seller_id', $user->id);
+                });
+            })
+            ->where('sender_id', '!=', $user->id)
+            ->where('is_read', false)
+            ->count();
+
+        $items = Item::withCount(['chats as unread_count' => function ($query) use ($user) {
+            $query->where('sender_id', '!=', $user->id)
+                  ->where('is_read', false);
+        }])->get();
+
         if($tab === 'buy') {
-            $items = $user->purchases()
-            ->with(['item' => function ($query) use ($keyword) {
-                $query->search($keyword);
-            }])
-            ->get()
-            ->pluck('item')
-            ->filter();
+            $query = $user->purchases()->with('item');
+
+            if ($keyword) {
+                $query->whereHas('item', fn($q) => $q->search($keyword));
+            }
+
+            $items = $query->get()->pluck('item')->filter();
+        } elseif ($tab === 'transaction') {
+            $items = Item::query()
+                ->whereHas('chats', function ($chatQuery) use ($user) {
+                    $chatQuery->whereHas('transaction', function ($txnQuery) use ($user) {
+                        $txnQuery->where(function ($roleQuery) use ($user) {
+                            $roleQuery->where('buyer_id', $user->id)
+                            ->orWhere('seller_id', $user->id);
+                        });
+                    });
+                })
+                ->when($keyword, fn ($q) => $q->search($keyword))
+                ->get();
         } else {
             $items = Item::where('user_id', $user->id)
             ->search($keyword)
             ->get();
         }
 
-        return view('mypage.profile', compact('user', 'profile', 'items'));
+        return view('mypage.profile', compact('user', 'profile', 'items', 'unreadTxnCount'));
     }
 
     public function edit()

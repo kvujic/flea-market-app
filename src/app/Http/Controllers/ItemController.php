@@ -51,7 +51,7 @@ class ItemController extends Controller
     }
 
     public function show($id) {
-        $item = Item::with('user.profile', 'categories')->findOrFail($id);
+        $item = Item::with('seller.profile', 'categories')->findOrFail($id);
 
         $comments = $item->comments()
         ->with('user.profile')

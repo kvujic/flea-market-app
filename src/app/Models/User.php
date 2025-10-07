@@ -38,12 +38,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Item::class);
     }
 
+    public function purchases() {
+        return $this->hasMany(Purchase::class, 'user_id');
+    }
+
     public function comments() {
         return $this->hasMany(Comment::class);
     }
 
     public function transactionsAsBuyer() {
-        return $this->hasMany(Transaction::class, 'buyer_id');
+        return $this->hasMany(Transaction::class, 'user_id');
     }
 
     public function sales() {
@@ -79,3 +83,5 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Item::class, 'likes', 'user_id', 'item_id');
     }
 }
+
+

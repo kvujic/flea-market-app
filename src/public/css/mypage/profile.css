@@ -13,7 +13,8 @@
 .profile__user-info {
     display: flex;
     align-items: center;
-    margin: 0 auto;
+    justify-content: left;
+    margin: 0 250px;
 }
 
 .profile__user-image {
@@ -24,7 +25,19 @@
     background-color: #e5e5e5;
 }
 
-.profile-user__edit {
+.profile-info__group {
+    
+}
+
+.star-colored {
+    color: #fff048;
+}
+
+.star-empty {
+    color: #d9d9d9;
+}
+
+.profile-info__edit {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -70,6 +83,28 @@
     font-weight: bold;
     padding-right: 80px;
     color: #5f5f5f;
+}
+
+.profile-tab__menu,
+.profile-tab__link {
+    position: relative;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.badge {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background-color: #ff0000;
+    color: #fff;
+    text-align: center;
+    transform: translateY(-2px);
 }
 
 .profile-tab__link.active {
@@ -145,6 +180,18 @@
     font-weight: bold;
     color: #fff;
     white-space: nowrap;
+}
+
+.unread-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50px;
 }
 
 @media screen and (max-width: 850px) {

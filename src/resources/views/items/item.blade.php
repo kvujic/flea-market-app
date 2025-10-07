@@ -54,12 +54,22 @@
 
                 <div class="purchase-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'purchase-link__disabled' : '' }}">
                     @if ($item->user_id === auth()->id())
-                    <button class="purchase-btn disabled" disabled>購入手続きへ</button>
+                        <button class="purchase-btn disabled" disabled>購入手続きへ</button>
                     @elseif ($item->is_sold)
-                    <button class="purchase-btn disabled" disabled>売り切れ</button>
+                        <button class="purchase-btn disabled" disabled>売り切れ</button>
                     @else
-                    <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
+                        <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
                     @endif
+                </div>
+                <div class="transaction-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'transaction-link__disabled' : '' }}">
+                    @if ($item->user_id === auth()->id())
+                        <button class="transaction-btn disabled" disabled>取引開始</button>
+                    @elseif ($item->is_sold)
+                        <button class="transaction-btn completed" disabled>取引完了</button>
+                    @else
+                        <a href="{{ route('item.chats.open', $item->id) }}" class="transaction-btn">取引開始</a>
+                    @endif
+
                 </div>
             </div>
 

@@ -8,6 +8,10 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\RatingController;
+use Illuminate\Database\Events\TransactionCommitted;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,7 +30,6 @@ Route::middleware('guest')->group(function () {
 
 // email-verified users route
 Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/mypage/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/item/{item}/like', [LikeController::class, 'store'])->name('item.like');
     Route::post('/item/{item}/comment', [CommentController::class, 'store'])->name('item.comment');
 
@@ -52,7 +55,27 @@ Route::middleware('auth')->group(function() {
     Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
 });
 
+// transaction
+Route::middleware(['auth'])->group(function() {
+    // transaction list　？
+    //Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
+    //start chat from item page (purchase_id null)
+    Route::get('/item/{item}/transaction', [TransactionController::class, 'openChat'])->name('item.chats.open');
+    // show conversation
+    Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
+    // send message
+    Route::post('/transactions/{chat}/messages', [ChatController::class, 'store'])->name('transactions.messages.store');
+    // mark as read
+    Route::post('/transactions/{chat}/read', [ChatController::class, 'markRead'])->name('transactions.messages.read');
+    // linking completed transactions to purchases
+    Route::post('/transactions/{chat}/bind-purchase', [TransactionController::class, 'bindPurchase'])->name('transactions.bindPurchase');
+    // edit and delete messages
+    Route::patch('/transactions/{chat}/messages/{message}', [ChatController::class, 'update'])->name('transactions.messages.update');
+    Route::delete('/transactions/{chat}/messages/{message}', [ChatController::class, 'destroy'])->name('transactions.messages.destroy');
 
+    // rating
+    Route::post('/transaction/{chat}/rate', [RatingController::class, 'rate'])->name('transactions.rate');
+});
 
 
 

@@ -10,8 +10,8 @@ class LikesTableSeeder extends Seeder
     public function run(): void
     {
         $likes = [
-            ['user_id' => 3, 'item_id' => 5],
-            ['user_id' => 3, 'item_id' => 9],
+            ['user_id' => 2, 'item_id' => 5],
+            ['user_id' => 1, 'item_id' => 9],
         ];
         foreach($likes as $like)
         Like::create($like);
