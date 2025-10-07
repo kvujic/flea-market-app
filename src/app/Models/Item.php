@@ -25,10 +25,38 @@ class Item extends Model
         return $this->hasOne(Purchase::class);
     }
 
-    // one-to-many relationship (child)
-    public function user()
+    public function transaction()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Transaction::class);
+    }
+
+    public function purchaseViaTransaction() {
+        return $this->hasOneThrough(
+            Purchase::class,
+            Transaction::class,
+            'item_id',
+            'id', //purchases.id
+            'id', // items.id
+            'purchase_id'
+        );
+    }
+
+    public function getEffectivePurchaseAttribute(): ?Purchase {
+        $viaTx = $this->relationLoaded('purchaseViaTransaction')
+            ? $this->getRelation('purchaseViaTransaction')
+            : $this->purchaseViaTransaction()->first();
+
+        if ($viaTx) return $viaTx;
+
+        return $this->relationLoaded('purchase')
+            ? $this->getRelation('purchase')
+            : $this->purchase()->first();
+    }
+
+    // one-to-many relationship (child)
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function condition()

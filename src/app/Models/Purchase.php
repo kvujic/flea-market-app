@@ -30,9 +30,14 @@ class Purchase extends Model
         return $this->belongsTo(Item::class);
     }
 
-    // one-to-many relationship
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function transaction() {
+        return $this->hasOne(Transaction::class, 'purchase_id');
     }
 
+    // one-to-many relationship
+    public function buyer() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    
 }

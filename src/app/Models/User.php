@@ -42,13 +42,36 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Comment::class);
     }
 
-    public function purchases() {
-        return $this->hasMany(Purchase::class);
+    public function transactionsAsBuyer() {
+        return $this->hasMany(Transaction::class, 'buyer_id');
+    }
+
+    public function sales() {
+        return $this->hasMany(Transaction::class, 'seller_id');
     }
 
     public function likes()
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function chats() {
+        return $this->hasMany(Chat::class, 'sender_id');
+    }
+
+    public function ratingsGiven() {
+        return $this->hasMany(Rating::class, 'rater_id');
+    }
+
+    public function ratingsReceived() {
+        return $this->hasMany(Rating::class, 'rated_id');
+    }
+
+    // average rating
+    protected function averageRatingAttribute(): \Illuminate\Database\Eloquent\Casts\Attribute {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::get(
+            fn() => ($avg = $this->ratingsReceived()->avg('score')) ? round($avg) : null
+        );
     }
 
     // many-to-many relationship (get favorite items through like)
