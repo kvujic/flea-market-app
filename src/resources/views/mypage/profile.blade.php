@@ -48,6 +48,9 @@
 <p class="item-no-list">商品がありません</p>
 @else
 <div class="profile__item-list">
+
+{{-- ここにtransaction中の商品が表示されるようにする--}}
+
     @foreach ($items as $item)
     <div class="item-card {{ $item->is_sold ? 'is_sold' : '' }}">
         <a href="{{ route('item.show', $item->id) }}" class="item-link">

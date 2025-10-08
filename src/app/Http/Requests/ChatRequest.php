@@ -15,16 +15,17 @@ class ChatRequest extends FormRequest
     {
         return [
             'message' => ['required', 'max:400'],
-            'item_image' => ['mimes:jpeg,png', 'max:20480']
+            'image' => ['mimes:jpeg,png', 'max:20480']
         ];
     }
 
     public function messages()
     {
-        return [[
+        return [
             'message.required' => '本文を入力してください',
             'message.max' => '本文は４００文字以内で入力してください',
-            'item_image' => '「.png」または「.jpeg」形式でアップロードしてください'
-        ]];
+            'image.mimes' => '「.png」または「.jpeg」形式でアップロードしてください',
+            'image.max' => '画像は20MB以下にしてください'
+        ];
     }
 }

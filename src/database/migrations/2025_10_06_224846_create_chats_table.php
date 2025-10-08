@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
             $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
             $table->text('message')->nullable();
-            $table->string('item_image')->nullable();
+            $table->string('image')->nullable();
             $table->boolean('is_read')->default(false);
             $table->timestamps();
 

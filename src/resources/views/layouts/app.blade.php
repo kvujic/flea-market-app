@@ -18,7 +18,7 @@
             <a href="{{ route('item.index') }}" class="header-logo__link">
                 <img class="header-logo" src="{{ asset('images/logo.svg') }}" alt="COACHTECH">
             </a>
-            @if (!Request::is('register') && !Request::is('login') && !Request::is('email/verify') && !Request::is('item/*/transaction'))
+            @if (!Request::is('register') && !Request::is('login') && !Request::is('email/verify') && !Request::is('transactions/*'))
             <div class="search-form">
                 <div class="search-form__form">
                     @csrf

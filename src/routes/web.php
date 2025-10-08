@@ -64,14 +64,14 @@ Route::middleware(['auth'])->group(function() {
     // show conversation
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show'])->name('transactions.show');
     // send message
-    Route::post('/transactions/{chat}/messages', [ChatController::class, 'store'])->name('transactions.messages.store');
+    Route::post('/transactions/{transaction}/messages', [ChatController::class, 'store'])->name('transactions.messages.store');
     // mark as read
-    Route::post('/transactions/{chat}/read', [ChatController::class, 'markRead'])->name('transactions.messages.read');
+    Route::post('/transactions/{transaction}/read', [ChatController::class, 'markRead'])->name('transactions.messages.read');
     // linking completed transactions to purchases
-    Route::post('/transactions/{chat}/bind-purchase', [TransactionController::class, 'bindPurchase'])->name('transactions.bindPurchase');
+    Route::post('/transactions/{transaction}/bind-purchase', [TransactionController::class, 'bindPurchase'])->name('transactions.bindPurchase');
     // edit and delete messages
-    Route::patch('/transactions/{chat}/messages/{message}', [ChatController::class, 'update'])->name('transactions.messages.update');
-    Route::delete('/transactions/{chat}/messages/{message}', [ChatController::class, 'destroy'])->name('transactions.messages.destroy');
+    Route::patch('/transactions/{transaction}/messages/{chat}', [ChatController::class, 'update'])->name('transactions.messages.update');
+    Route::delete('/transactions/{transaction}/messages/{chat}', [ChatController::class, 'destroy'])->name('transactions.messages.destroy');
 
     // rating
     Route::post('/transaction/{chat}/rate', [RatingController::class, 'rate'])->name('transactions.rate');

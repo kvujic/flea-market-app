@@ -13,7 +13,7 @@ class Chat extends Model
         'transaction_id',
         'sender_id',
         'message',
-        'item_image',
+        'image',
         'is_read',
     ];
 
@@ -21,7 +21,7 @@ class Chat extends Model
         return $this->belongsTo(Transaction::class);
     }
 
-    public function sender() {
+    public function user() {
         return $this->belongsTo(User::class, 'sender_id');
     }
 }

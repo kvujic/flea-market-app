@@ -50,7 +50,8 @@ class ItemController extends Controller
         return view('items.index', compact('items', 'tab', 'categories'));
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $item = Item::with('seller.profile', 'categories')->findOrFail($id);
 
         $comments = $item->comments()
