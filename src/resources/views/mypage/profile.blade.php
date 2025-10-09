@@ -19,8 +19,8 @@
                 @if ($user->average_rating)
                 <p class="profile__rating">
                     @for ($i = 1; $i <= 5; $i++)
-                    <span class="{{ $i <= $user->average_rating ? 'star-colored' : 'star-empty' }}">★</span>
-                    @endfor
+                        <span class="{{ $i <= $user->average_rating ? 'star-colored' : 'star-empty' }}">★</span>
+                        @endfor
                 </p>
                 @endif
             </div>
@@ -44,13 +44,33 @@
     </div>
     <hr class="separator">
 </div>
-@if ($items -> isEmpty())
+
+@if (request('tab') === 'transaction' ? $transactions->isEmpty() : $items -> isEmpty())
 <p class="item-no-list">商品がありません</p>
 @else
 <div class="profile__item-list">
 
-{{-- ここにtransaction中の商品が表示されるようにする--}}
+    @if (request('tab') === 'transaction')
+    @forelse ($transactions as $txn)
+    <div class="item-card {{ data_get($txn->item, 'is_sold') ? 'is_sold' : '' }}">
+        <a href="{{ route('transactions.show', $txn) }}" class="item-link">
+            <div class="item-wrapper">
+                <img src="{{ asset('storage/' . data_get($txn->item, 'item_image')) }}" alt="{{ data_get($txn->item, 'name') }}" class="item-image">
+            </div>
+            <p class="item-label">{{ data_get($txn->item, 'name') }}</p>
+            @if (data_get($txn->item, 'is_sold'))
+            <span class="sold-ribbon">SOLD</span>
+            @endif
+            @if (!empty($txn->unread_count) && $txn->unread_count > 0)
+            <span class="unread-badge">{{ $txn->unread_count > 99 ? '99' : $txn->unread_count }}</span>
+            @endif
+        </a>
+    </div>
+    @empty
+    <p class="item-no-list">商品がありません</p>
+    @endforelse
 
+    @else
     @foreach ($items as $item)
     <div class="item-card {{ $item->is_sold ? 'is_sold' : '' }}">
         <a href="{{ route('item.show', $item->id) }}" class="item-link">
@@ -61,16 +81,10 @@
             @if ($item->is_sold)
             <span class="sold-ribbon">SOLD</span>
             @endif
-
-            @if (request('tab') === 'transaction' && !empty($item->unread_count) && $item->unread_count > 0)
-            <span class="unread-badge">
-                {{ $item->unread_count > 99 ? '99' : $item->unread_count }}
-            </span>
-            @endif
-
         </a>
     </div>
     @endforeach
     @endif
 </div>
+@endif
 @endsection

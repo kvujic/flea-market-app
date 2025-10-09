@@ -36,8 +36,8 @@ class Item extends Model
             Purchase::class,
             Transaction::class,
             'item_id',
-            'id', //purchases.id
-            'id', // items.id
+            'id', //purchases
+            'id', // items
             'purchase_id'
         );
     }

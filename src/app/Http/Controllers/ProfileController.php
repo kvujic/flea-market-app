@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Profile;
 use App\Models\Item;
 use App\Models\Chat;
+use App\Models\Transaction;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,6 +24,9 @@ class ProfileController extends Controller
         $keyword = $request->input('keyword');
         $tab = $request->input('tab');
 
+        $items = collect();
+        $transactions = collect();
+
         $unreadTxnCount = Chat::query()
             ->whereHas('transaction', function($chatQuery) use ($user) {
                 $chatQuery->where(function ($roleQuery) use ($user) {
@@ -34,11 +38,6 @@ class ProfileController extends Controller
             ->where('is_read', false)
             ->count();
 
-        $items = Item::withCount(['chats as unread_count' => function ($query) use ($user) {
-            $query->where('sender_id', '!=', $user->id)
-                  ->where('is_read', false);
-        }])->get();
-
         if($tab === 'buy') {
             $query = $user->purchases()->with('item');
 
@@ -47,7 +46,25 @@ class ProfileController extends Controller
             }
 
             $items = $query->get()->pluck('item')->filter();
+
         } elseif ($tab === 'transaction') {
+            $transactions = Transaction::query()
+                ->with('item')
+                ->where(function ($q) use ($user) {
+                    $q->where('buyer_id' , $user->id)->orWhere('seller_id', $user->id);
+                })
+                ->when($keyword, function ($q) use ($keyword) {
+                    $q->whereHas('item', fn($iq) => $iq->search($keyword));
+                })
+                ->withCount([
+                    'chats as unread_count' => function ($q) use ($user) {
+                        $q->where('is_read', false)->where('sender_id', '!=', $user->id);
+                    }
+                ])
+                ->latest('updated_at')
+                ->get();
+
+            /*
             $items = Item::query()
                 ->whereHas('chats', function ($chatQuery) use ($user) {
                     $chatQuery->whereHas('transaction', function ($txnQuery) use ($user) {
@@ -59,13 +76,14 @@ class ProfileController extends Controller
                 })
                 ->when($keyword, fn ($q) => $q->search($keyword))
                 ->get();
+                */
         } else {
             $items = Item::where('user_id', $user->id)
             ->search($keyword)
             ->get();
         }
 
-        return view('mypage.profile', compact('user', 'profile', 'items', 'unreadTxnCount'));
+        return view('mypage.profile', compact('user', 'profile', 'items', 'transactions', 'unreadTxnCount'));
     }
 
     public function edit()

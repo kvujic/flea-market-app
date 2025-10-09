@@ -72,7 +72,7 @@
                 </div>
                 @if ($msg->image)
                 <p class="chat-message__image">
-                    <img src="{{ $msg->image }}" alt="upload_image">
+                    <img src="{{ asset('storage/chat_image/' . $msg->image) }}" alt="upload_image">
                 </p>
                 @endif
                 @if ($msg->message)
@@ -83,31 +83,6 @@
                 <div class="chat-message__actions">
                     <button class="edit-btn" type="button" data-target="edit-modal-{{ $msg->id }}">編集</button>
 
-                    {{-- モーダル --}}
-                    <div id="edit-modal-{{ $msg->id }}" class="modal" aria-hidden="true">
-                        <div class="modal__overlay" data-close></div>
-                        <div class="modal__content" role="dialog" aria-modal="true" aria-labelledby="edit-title-{{ $msg->id }}">
-                            <h3 id="edit-title-{{ $msg->id }}" class="edit-title">メッセージを編集</h3>
-
-                            <form method="POST"
-                                action="{{ route('transactions.messages.update', ['transaction' => $transaction->id, 'chat' => $msg->id]) }}">
-                                @csrf
-                                @method('PATCH')
-
-                                <textarea class="edit-textarea" name="message" rows="4" required>{{ old('message', $msg->message) }}</textarea>
-
-                                @error('message')
-                                <div class="form-error">{{ $message }}</div>
-                                @enderror
-
-                                <div class="modal__actions">
-                                    <button type="submit" class="btn-primary">更新</button>
-                                    <button type="button" class="btn-outline" data-close>キャンセル</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
                     <form action="{{ route('transactions.messages.destroy', ['transaction' => $transaction->id, 'chat' => $msg->id]) }}" method="POST">
                         @method('DELETE')
                         @csrf
@@ -116,17 +91,44 @@
                 </div>
                 @endif
             </div>
+
+            {{-- modal for edit message --}}
+            <div id="edit-modal-{{ $msg->id }}" class="modal" aria-hidden="true">
+                <div class="modal__overlay" data-close></div>
+                <div class="modal__content" role="dialog" aria-modal="true" aria-labelledby="edit-title-{{ $msg->id }}">
+                    <h3 id="edit-title-{{ $msg->id }}" class="edit-title">メッセージを編集</h3>
+
+                    <form method="POST"
+                        action="{{ route('transactions.messages.update', ['transaction' => $transaction->id, 'chat' => $msg->id]) }}">
+                        @csrf
+                        @method('PATCH')
+
+                        <textarea class="edit-textarea" name="message" rows="4" required>{{ old('message', $msg->message) }}</textarea>
+
+                        @error('message')
+                        <div class="form-error">{{ $message }}</div>
+                        @enderror
+
+                        <div class="modal__actions">
+                            <button type="submit" class="btn-primary">更新</button>
+                            <button type="button" class="btn-outline" data-close>キャンセル</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             @endforeach
         </div>
         @endif
 
         <div class="chat-input">
-            @error('message')
-            <div class="chat-form__error">{{ $message }}</div>
-            @enderror
-            @error('image')
-            <div class="chat-form__error">{{ $message }}</div>
-            @enderror
+            <div class="chat-error__message">
+                @error('message')
+                <div class="chat-form__error">{{ $message }}</div>
+                @enderror
+                @error('image')
+                <div class="chat-form__error">{{ $message }}</div>
+                @enderror
+            </div>
             <form action="{{ route('transactions.messages.store', $transaction) }}" method="POST" enctype="multipart/form-data" class="chat-input__form">
                 @csrf
                 <textarea class="chat-input__textarea" name="message" rows="1" placeholder="取引メッセージを記入してください"></textarea>
@@ -140,7 +142,6 @@
             </form>
         </div>
     </main>
-
 </div>
 
 <script>

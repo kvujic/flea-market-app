@@ -23,7 +23,7 @@ class ChatController extends Controller
             'sender_id' => auth()->id(),
             'message' => $request->message,
             'image' => $imagePath ? Storage::disk('public')->url($imagePath) : null,
-            'is_read' => true,
+            'is_read' => false,
         ]);
 
         $transaction->touch();
@@ -43,23 +43,17 @@ class ChatController extends Controller
 
     public function update(Transaction $transaction, Chat $chat, Request $request)
     {
-        //一時デバッグ
-        //dd($transaction->id, $chat->id, $chat->transaction_id);
-
         abort_unless((int)$chat->transaction_id === (int)$transaction->id, 404);
         abort_unless((int)$chat->sender_id === (int)auth()->id(), 403);
 
         $chat->update(['message' => $request->message]);
         $transaction->touch();
-        
+
         return back();
     }
 
     public function destroy(Transaction $transaction, Chat $chat)
     {
-        //一時デバッグ
-        //dd($transaction->id, $chat->id, $chat->transaction_id);
-
         abort_unless((int)$chat->transaction_id === (int)$transaction->id, 404);
         abort_unless((int)$chat->sender_id === (int)auth()->id(), 403);
 
