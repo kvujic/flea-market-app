@@ -38,12 +38,10 @@ class TransactionController extends Controller
         $transaction->chats()
             ->where('sender_id', '!=', auth()->id())
             ->where('is_read', false)
-            ->update([
-                'is_read' => true,
-            ]);
+            ->update(['is_read' => true]);
 
         $messages = $transaction->chats()
-            ->with('sender')
+            ->with('sender.profile')
             ->orderBy('created_at')
             ->get();
 

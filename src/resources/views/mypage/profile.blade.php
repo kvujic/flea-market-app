@@ -16,10 +16,19 @@
             <img src="{{ asset($profileImagePath) }}" alt="profile-image" class="profile__user-image">
             <div class="profile-user__group">
                 <p class="profile__user-name">{{ $profile && $profile->name ? $profile->name : $user->name }}</p>
-                @if ($user->average_rating)
+
+                @php
+                $avg = $user->average_rating;
+                @endphp
+
+                @if (!is_null($avg))
+                @php
+                $rounded = (int) $avg;
+                @endphp
+
                 <p class="profile__rating">
                     @for ($i = 1; $i <= 5; $i++)
-                        <span class="{{ $i <= $user->average_rating ? 'star-colored' : 'star-empty' }}">★</span>
+                        <span class="stars {{ $i <= $rounded ? 'star-filled' : 'star-empty' }}">&#9733;</span>
                         @endfor
                 </p>
                 @endif
@@ -87,4 +96,10 @@
     @endif
 </div>
 @endif
+
+<script>
+    window.addEventListener('pageshow', function(e) {
+        if (e.persisted) location.reload();
+    });
+</script>
 @endsection

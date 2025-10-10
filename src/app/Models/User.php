@@ -2,6 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Profile;
+use App\Models\Item;
+use App\Models\Purchase;
+use App\Models\Comment;
+use App\Models\Transaction;
+use App\Models\Like;
+use App\Models\Chat;
+use App\Models\Rating;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -72,9 +81,12 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     // average rating
-    protected function averageRatingAttribute(): \Illuminate\Database\Eloquent\Casts\Attribute {
-        return \Illuminate\Database\Eloquent\Casts\Attribute::get(
-            fn() => ($avg = $this->ratingsReceived()->avg('score')) ? round($avg) : null
+    protected function averageRating(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => ($avg = $this->ratingsReceived()->avg('score')) !== null
+                ? (int) round($avg)
+                : null
         );
     }
 

@@ -7,13 +7,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const errorBox = document.getElementById("ratingError");
     const ratingSubmitBtn = document.getElementById("ratingSubmitBtn");
 
-    if (!completeForm || !ratingModal) return;
+    if (!ratingModal) return;
 
-    completeForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        ratingModal.classList.add("is-open");
-        document.body.style.overflow = "hidden";
-    });
+    if (completeForm) {
+        completeForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            ratingModal.classList.add("is-open");
+            document.body.style.overflow = "hidden"
+        });
+    }
 
     stars.forEach(star => {
         star.addEventListener("click", () => {

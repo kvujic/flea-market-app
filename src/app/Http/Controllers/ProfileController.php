@@ -9,6 +9,7 @@ use App\Models\Chat;
 use App\Models\Transaction;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -19,7 +20,10 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        $user = auth()->user()->load('profile');
+        $user = auth()->user()
+            ->load('profile')
+            ->loadAvg('ratingsReceived as average_rating', 'score');
+            
         $profile = $user->profile;
         $keyword = $request->input('keyword');
         $tab = $request->input('tab');
@@ -61,22 +65,9 @@ class ProfileController extends Controller
                         $q->where('is_read', false)->where('sender_id', '!=', $user->id);
                     }
                 ])
-                ->latest('updated_at')
+                ->orderByRaw('last_message_at IS NULL, last_message_at DESC')
                 ->get();
 
-            /*
-            $items = Item::query()
-                ->whereHas('chats', function ($chatQuery) use ($user) {
-                    $chatQuery->whereHas('transaction', function ($txnQuery) use ($user) {
-                        $txnQuery->where(function ($roleQuery) use ($user) {
-                            $roleQuery->where('buyer_id', $user->id)
-                            ->orWhere('seller_id', $user->id);
-                        });
-                    });
-                })
-                ->when($keyword, fn ($q) => $q->search($keyword))
-                ->get();
-                */
         } else {
             $items = Item::where('user_id', $user->id)
             ->search($keyword)

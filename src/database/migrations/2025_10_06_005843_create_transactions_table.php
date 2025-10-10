@@ -15,9 +15,11 @@ return new class extends Migration
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->foreignId('purchase_id')->nullable()->constrained()->nullOnDelete();
             $table->enum('status', ['in_progress','waiting_for_seller', 'completed'])->default('in_progress');
+            $table->timestamp('last_message_at')->nullable();
             $table->timestamps();
 
             $table->index(['buyer_id', 'seller_id', 'status']);
+            $table->index('last_message_at');
         });
     }
 

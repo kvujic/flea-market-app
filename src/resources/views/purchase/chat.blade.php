@@ -56,13 +56,13 @@
         @if ($messages->isEmpty())
         <p class="chat-message__none">メッセージはありません</p>
         @else
-        <div class="chat-thread">
+        <div id="chat-thread" class="chat-thread">
             @foreach ($messages as $msg)
             @php
-            $mine = $msg->sender_id === auth()->id();
-            $avatar = data_get($msg->user, 'profile.profile_image', 'default-image.png');
+            $mine = (int)$msg->sender_id === (int)auth()->id();
+            $avatar = data_get($msg->sender, 'profile.profile_image', 'default-image.png');
             @endphp
-            <div class="chat-message {{ $mine ? 'is-mine' : 'is-others' }}">
+            <div class="chat-message {{ $mine ? 'is-mine' : 'is-others' }}" @if ($loop->last) id="last-message" @endif>
                 <div class="chat-message__info">
                     @if (!$mine)
                     <img src="{{ asset('storage/profiles/' . ($otherUser->profile->profile_image ?? 'default-image.png')) }}" alt="" class="chat-message__avatar">
@@ -131,9 +131,10 @@
                 <div class="chat-form__error">{{ $message }}</div>
                 @enderror
             </div>
-            <form action="{{ route('transactions.messages.store', $transaction) }}" method="POST" enctype="multipart/form-data" class="chat-input__form" id="chatInputForm">
+            <form action="{{ route('transactions.messages.store', $transaction) }}" method="POST" enctype="multipart/form-data" class="chat-input__form" id="chatInputForm" data-clear-on-submit="true">
                 @csrf
-                <textarea id="chatMessageInput" class="chat-input__textarea" name="message" rows="1" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
+                <textarea id="chatMessageInput" class="chat-input__textarea" name="message" rows="1" placeholder="取引メッセージを記入してください">{{ $errors->any() ? old('message') : '' }}</textarea>
+                <input type="hidden" id="messageHidden">
                 <label class="chat-input__file">
                     <input type="file" name="image" accept="image/*" hidden id="chatImageInput">
                     <span class="chat-input__image">画像を追加</span>
@@ -148,8 +149,8 @@
 
 {{-- modal for rating --}}
 <div id="rating-modal" class="modal" aria-hidden="true">
-    <div class="modal__overlay"></div>
-    <div class="modal__content" role="dialog" aria-modal="true" aria-labelledby="rating-title">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="rating-title">
         <h2 id="rating-title" class="rating-modal__title">取引が完了しました。</h2>
         <hr class="line">
         <form action="{{ route('ratings.store', $transaction) }}" id="ratingForm" method="POST">
@@ -172,52 +173,100 @@
     </div>
 </div>
 
-{{-- JS --}}
+{{-- JS / thread scroll --}}
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const last = document.getElementById("last-message");
+        if (last) {
+            last.scrollIntoView({
+                block: "end",
+                behavior: "auto"
+            });
+        }
+    });
+</script>
+
+{{-- JS / edit for message --}}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.modal').forEach(modal => {
+            const textarea = modal.querySelector('textarea.edit-textarea');
+            if (textarea) {
+                textarea.dataset.initial = textarea.value;
+            }
+        });
+    });
+
     document.addEventListener('click', function(e) {
         const openBtn = e.target.closest('[data-target]');
         if (openBtn) {
             const id = openBtn.getAttribute('data-target');
+
+            document.querySelectorAll('.modal.is-open').forEach(m => {
+                resetModal(m);
+                m.classList.remove('is-open');
+            });
+
             const m = document.getElementById(id);
             if (m) {
                 m.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
             }
         }
+
         if (e.target.hasAttribute('data-close')) {
             const m = e.target.closest('.modal');
             if (m) {
+                resetModal(m);
                 m.classList.remove('is-open');
-                document.body.style.overflow = '';
+                if (!document.querySelector('.modal.is-open')) {
+                    document.body.style.overflow = '';
+                }
             }
         }
     });
+
+    function resetModal(modal) {
+        const form = modal.querySelector('form');
+        const textarea = modal.querySelector('textarea.edit-textarea');
+        const err = modal.querySelector('.form-error');
+
+        if (form) form.reset();
+        if (textarea && textarea.dataset.initial !== undefined) {
+            textarea.value = textarea.dataset.initial;
+        }
+        if (err) err.textContent = '';
+    }
 </script>
 
+{{-- JS / record message on the message form --}}
 <script>
     (function() {
         const form = document.getElementById('chatInputForm');
         const textarea = document.getElementById('chatMessageInput');
         if (!form || !textarea) return;
 
+        const CLEAR_UI_ON_SUBMIT = form.dataset.clearOnSubmit === 'true';
+
         const userId = form.dataset.userId || 'guest';
         const txnId = form.dataset.transactionId || 'unknown';
         const STORAGE_KEY = `draft:chat:${userId}:${txnId}`;
+
+        const originalName = textarea.getAttribute('name') || 'message';
+        if (!textarea.hasAttribute('name')) textarea.setAttribute('name', originalName);
 
         document.addEventListener('DOMContentLoaded', () => {
             const hasServerOld = textarea.value && textarea.value.trim().length > 0;
             if (!hasServerOld) {
                 const saved = localStorage.getItem(STORAGE_KEY);
-                if (saved !== null) {
-                    textarea.value = saved;
-                }
+                if (saved !== null) textarea.value = saved;
             }
         });
 
-        let saveTimer = null;
+        let timer = null;
         textarea.addEventListener('input', () => {
-            if (saveTimer) clearTimeout(saveTimer);
-            saveTimer = setTimeout(() => {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
                 localStorage.setItem(STORAGE_KEY, textarea.value);
             }, 150);
         });
@@ -227,11 +276,59 @@
         });
 
         form.addEventListener('submit', () => {
+            const val = textarea.value; // 送る値
             localStorage.removeItem(STORAGE_KEY);
+
+            if (CLEAR_UI_ON_SUBMIT) {
+                const hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = originalName;
+                hidden.value = val;
+                form.appendChild(hidden);
+
+                textarea.removeAttribute('name');
+                textarea.value = '';
+            }
+        });
+
+        window.addEventListener('pageshow', (e) => {
+            const form = document.getElementById('chatInputForm');
+            const textarea = document.getElementById('chatMessageInput');
+            if (!form || !textarea) return;
+
+            const userId = form.dataset.userId || 'guest';
+            const txnId = form.dataset.transactionId || 'unknown';
+            const STORAGE_KEY = `draft:chat:${userId}:${txnId}`;
+
+            const hasDraft = localStorage.getItem(STORAGE_KEY) !== null;
+            if (e.persisted && !hasDraft) {
+                textarea.value = '';
+            }
         });
     })();
 </script>
 
+{{-- JS / rating modal --}}
 <script src="{{ asset('js/rating.js') }}"></script>
+
+{{-- JS / modal open for seller --}}
+@php
+$buyerRated = $transaction->ratings()->where('rater_id', $transaction->buyer_id)->exists();
+$sellerRated = $transaction->ratings()->where('rater_id', $transaction->seller_id)->exists();
+$promptRate = request('prompt') === 'rate';
+$shouldOpen = (($transaction->status === 'waiting_for_seller') || $buyerRated) && !$sellerRated;
+$shouldOpen = $promptRate ? $shouldOpen : $shouldOpen;
+@endphp
+@if (auth()->id() === (int)$transaction->seller_id && $shouldOpen)
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const m = document.getElementById('rating-modal');
+        if (m) {
+            m.classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+</script>
+@endif
 
 @endsection

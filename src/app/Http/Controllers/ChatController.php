@@ -19,14 +19,14 @@ class ChatController extends Controller
             $imagePath = $request->file('image')->store('chat_image', 'public');
         }
 
-        $message = $transaction->chats()->create([
+        $transaction->chats()->create([
             'sender_id' => auth()->id(),
             'message' => $request->message,
             'image' => $imagePath ? Storage::disk('public')->url($imagePath) : null,
             'is_read' => false,
         ]);
 
-        $transaction->touch();
+        $transaction->update(['last_message_at' => now()]);
 
         return back();
     }
@@ -49,7 +49,7 @@ class ChatController extends Controller
         return back();
     }
 
-    public function update(Transaction $transaction, Chat $chat, Request $request)
+    public function update(Transaction $transaction, Chat $chat, ChatRequest $request)
     {
         abort_unless((int)$chat->transaction_id === (int)$transaction->id, 404);
         abort_unless((int)$chat->sender_id === (int)auth()->id(), 403);

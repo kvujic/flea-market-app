@@ -15,6 +15,7 @@ class Transaction extends Model
         'item_id',
         'purchase_id',
         'status',
+        'last_message_at'
     ];
 
     public function buyer() {
