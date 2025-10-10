@@ -34,7 +34,7 @@ class PurchasesTableSeeder extends Seeder
         }
 
         // change to sold
-        foreach ([1, 9] as $itemId) {
+        foreach ([4, 9] as $itemId) {
             $item = Item::find($itemId);
             if ($item) {
                 $item->is_sold = true;

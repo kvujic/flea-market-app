@@ -57,8 +57,6 @@ Route::middleware('auth')->group(function() {
 
 // transaction
 Route::middleware(['auth'])->group(function() {
-    // transaction list　？
-    //Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
     //start chat from item page (purchase_id null)
     Route::get('/item/{item}/transaction', [TransactionController::class, 'openChat'])->name('item.chats.open');
     // show conversation
@@ -67,14 +65,12 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/transactions/{transaction}/messages', [ChatController::class, 'store'])->name('transactions.messages.store');
     // mark as read
     Route::post('/transactions/{transaction}/read', [ChatController::class, 'markRead'])->name('transactions.messages.read');
-    // linking completed transactions to purchases
-    Route::post('/transactions/{transaction}/bind-purchase', [TransactionController::class, 'bindPurchase'])->name('transactions.bindPurchase');
     // edit and delete messages
     Route::patch('/transactions/{transaction}/messages/{chat}', [ChatController::class, 'update'])->name('transactions.messages.update');
     Route::delete('/transactions/{transaction}/messages/{chat}', [ChatController::class, 'destroy'])->name('transactions.messages.destroy');
 
     // rating
-    Route::post('/transaction/{chat}/rate', [RatingController::class, 'rate'])->name('transactions.rate');
+    Route::post('/transactions/{transaction}/ratings', [RatingController::class, 'store'])->name('ratings.store');
 });
 
 

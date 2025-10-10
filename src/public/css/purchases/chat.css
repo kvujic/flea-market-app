@@ -1,12 +1,16 @@
 .chat-content {
     display: flex;
-    height: 100vh;
-    margin: 0;
+    height: 100%;
+    overflow: hidden;
 }
 
 .chat-sidebar {
     background: #868686;
     width: 17%;
+
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
 .chat-sidebar__title {
@@ -43,6 +47,12 @@
 .chat-main {
     margin: 15px 0;
     width: 83%;
+
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 10px);
+    overflow: auto;
+    padding-bottom: 80px;
 }
 
 .chat-header {
@@ -80,11 +90,13 @@
 }
 
 .separator {
-    border-bottom: solid 1px #5f5f5f;
+    border: 0;
+    border-top: solid 1px #5f5f5f;
+    margin: 16px 0;
 }
 
 .chat-item {
-    margin: 15px 40px;
+    margin: 0 40px;
 }
 
 .chat-item__wrap {
@@ -93,8 +105,10 @@
 }
 
 .chat-item__image {
-    width: 200px;
-    height: 200px;
+    width: auto;
+    max-width: 200px;
+    height: auto;
+    max-height: 200px;
 }
 
 .chat-item__info {
@@ -104,7 +118,7 @@
 .chat-item__name {
     font-size: 48px;
     font-weight: bold;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .chat-item__price {
@@ -116,8 +130,12 @@
     text-align: center;
 }
 
+
 .chat-thread {
-    margin: 25px;
+    margin: 0 25px 0;
+
+    flex: 1 1 1;
+    overflow-y: auto;
 }
 
 .chat-message {
@@ -132,7 +150,7 @@
 }
 
 .chat-message.is-others {
-    align-self: flex-end;
+    align-self: flex-start;
     text-align: left;
 }
 
@@ -154,7 +172,27 @@
 }
 
 .chat-message__image {
+    display: block;
+    margin: 10px 0;
+    object-fit: contain;
+}
 
+.chat-message.is-mine
+.chat-message__image {
+    text-align: right;
+}
+
+.chat-message.is-others
+.chat-message__image {
+    text-align: left;
+}
+
+.upload-image {
+    display: inline-block;
+    max-width: 30%;
+    height: auto;
+    max-height: 250px;
+    vertical-align: top;
 }
 
 .chat-message__body {
@@ -194,6 +232,8 @@
     left: 17%;
     width: 83%;
     padding: 20px 30px;
+    z-index: 10;
+    background-color: #fff;
 }
 
 .chat-input__form {
@@ -209,6 +249,7 @@
     border: solid 1px #5f5f5f;
     border-radius: 4px;
     font-size: 20px;
+    color: #7b7b7b;
 }
 
 .chat-input__file {
@@ -221,6 +262,7 @@
 
 .chat-input__image {
     color: #ff5555;
+    background-attachment: #fff;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
@@ -237,12 +279,12 @@
 .send-image {
     width: 100%;
     height: 100%;
+    background-color: transparent;
 }
 
 
-/* モーダルの初期表示を隠す */
+/* modal for edit */
 .modal {
-    display: none;
     position: fixed;
     inset: 0;
     z-index: 1000;
@@ -285,6 +327,197 @@
     padding: 10px 20px;
 }
 
-@meida (max-width: 850px) and (min-width: 768px) {
+/* modal for rating */
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    z-index: 1000;
+}
 
+.modal.is-open {
+    display: grid;
+    place-items: center;
+}
+
+.modal__overlay {
+    position: absolute;
+    inset: 0;
+}
+
+.modal__content {
+    position: relative;
+    max-width: none;
+    max-height: none;
+    width: 600px;
+    height: 370px;
+    overflow: auto;
+    background-color: #fdfce6;
+    border: solid 1px #000;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin-top:250px;
+    margin-right: 400px;
+}
+
+.rating-modal__title {
+    font-size: 35px;
+    font-weight: normal;
+    margin: 0;
+    padding: 15px 25px;
+}
+
+.line {
+    border-top: solid 1px #000;
+    margin: 0;
+    width: 100%;
+}
+
+.rating-modal__body {
+    padding: 10px 25px 5px;
+}
+
+.rating-modal__message {
+    color: #868686;
+    font-size: 20px;
+    margin: 0;
+}
+
+.rating-stars {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 4px 0;
+}
+
+.rating-stars .star {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0 2px;
+    font-size: clamp(60px, 15vw, 100px);
+    color: #d9d9d9;
+    transition: color .15s ease, transform .08s ease;;
+}
+
+.rating-stars .star:hover,
+.rating-stars .star:focus-visible,
+.rating-stars .star.selected {
+    color: #fff048;
+    outline: none;
+    transform: scale(1.02);
+}
+
+.rating-modal__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 25px;
+}
+
+.rating-modal__bottom .error {
+    margin: 0;
+    color: #ff0000;
+    font-size: 18px;
+}
+
+.rating-modal__send {
+    border: none;
+    background-color: #ff8282;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform .05s ease, filter .15s ease;
+    padding: 6px 15px;
+}
+
+.rating-modal__send:hover {
+    filter: brightness(1.03);
+}
+
+.rating-modal__send:active {
+    transform: translateY(1px);
+}
+
+.rating-modal__send:disabled {
+    opacity: .6; cursor: not-allowed;
+}
+
+
+
+
+@media (max-width: 850px) and (min-width: 768px) {
+    .chat-sidebar {
+        width: 30%;
+    }
+    .chat-header {
+        display: flex;
+        flex-direction: column;
+    }
+    .chat-sidebar__title {
+        font-size: 25px;
+    }
+    .chat-sidebar__item {
+        width: 160px;
+    }
+    .chat-sidebar__link {
+        font-size: 20px;
+    }
+    .chat-header__title {
+        font-size: 28px;
+    }
+    .chat-complete__btn {
+        font-size: 16px;
+    }
+
+    .chat-item__image {
+        width: auto;
+        max-width: 180px;
+        height: auto;
+        max-height: 180px;
+    }
+    .chat-item__name {
+        font-size: 35px;
+    }
+    .chat-item__price {
+        font-size: 32px;
+    }
+    .chat-message__body {
+        width: 45%;
+        font-size: 18px;
+    }
+
+    .chat-input {
+        left: 25%;
+        width: 75%;
+    }
+    .chat-input__textarea {
+        padding: 10px;
+        font-size: 16px;
+    }
+    .chat-input__image {
+        font-size: 16px;
+    }
+
+
+    .modal__content {
+        margin-right: 10%;
+    }
+    .rating-stars {
+        gap: 3px;
+    }
+    .rating-modal__body {
+        padding: 20px 15px 0;
+    }
+    .rating-modal__send {
+        font-size: 20px;
+    }
 }

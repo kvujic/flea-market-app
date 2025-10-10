@@ -163,10 +163,11 @@
 .transaction-link {
     border: solid 2px #ff5555;
     width: 100%;
+    border-radius: 3px;
+    width: 100%;
     text-align: center;
     padding: 8px 0;
     margin-top: 20px;
-    border-radius: 3px;
 }
 
 .transaction-btn {

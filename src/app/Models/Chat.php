@@ -17,11 +17,15 @@ class Chat extends Model
         'is_read',
     ];
 
+    protected $casts = [
+        'is_read' => 'boolean'
+    ];
+
     public function transaction() {
         return $this->belongsTo(Transaction::class);
     }
 
-    public function user() {
+    public function sender() {
         return $this->belongsTo(User::class, 'sender_id');
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained()->cascadeOnDelete();
             $table->foreignId('purchase_id')->nullable()->constrained()->nullOnDelete();
-            $table->enum('status', ['pending', 'completed'])->default('pending');
+            $table->enum('status', ['in_progress','waiting_for_seller', 'completed'])->default('in_progress');
             $table->timestamps();
 
             $table->index(['buyer_id', 'seller_id', 'status']);

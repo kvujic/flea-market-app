@@ -33,10 +33,18 @@ class ChatController extends Controller
 
     public function markRead(Transaction $transaction)
     {
-        $transaction->chats()
+        abort_unless(in_array(auth()->id(), [(int)$transaction->buyer_id, (int)$transaction->seller_id], true), 404);
+
+        $affected = $transaction->chats()
             ->where('sender_id', '!=', auth()->id())
             ->where('is_read', false)
-            ->update(['is_read' => true]);
+            ->update([
+                'is_read' => true,
+            ]);
+
+        if ($request->wantsJson()) {
+            return response()->json(['ok' => true, 'updated' => $affected]);
+        }
 
         return back();
     }

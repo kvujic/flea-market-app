@@ -35,9 +35,7 @@ class Purchase extends Model
     }
 
     // one-to-many relationship
-    public function buyer() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function user() {
+        return $this->belongsTo(User::class, 'buyer_id');
     }
-
-    
 }

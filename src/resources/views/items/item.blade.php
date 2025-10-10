@@ -52,25 +52,21 @@
                     </div>
                 </div>
 
-                <div class="purchase-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'purchase-link__disabled' : '' }}">
-                    @if ($item->user_id === auth()->id())
-                        <button class="purchase-btn disabled" disabled>購入手続きへ</button>
-                    @elseif ($item->is_sold)
-                        <button class="purchase-btn disabled" disabled>売り切れ</button>
+                <div class="purchase-link {{ ($item->user_id === auth()->id() || $item->is_sold || in_array(optional($item->transaction)->status, ['waiting_for_seller', 'completed'])) ? 'purchase-link__disabled' : '' }}">
+                    @if ($item->user_id === auth()->id() && !$item->is_sold)
+                    <button class="purchase-btn disabled" disabled>購入手続きへ</button>
+                    @elseif ($item->is_sold || in_array(optional($item->transaction)->status, ['waiting_for_seller', 'completed']))
+                    <button class="purchase-btn disabled" disabled>売り切れ</button>
                     @else
-                        <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
+                    <a href="{{ route('purchase.purchase', $item->id) }}" class="purchase-btn">購入手続きへ</a>
                     @endif
                 </div>
-                <div class="transaction-link {{ $item->user_id === auth()->id() || $item->is_sold ? 'transaction-link__disabled' : '' }}">
-                    @if ($item->user_id === auth()->id())
-                        <button class="transaction-btn disabled" disabled>取引開始</button>
-                    @elseif ($item->is_sold)
-                        <button class="transaction-btn completed" disabled>取引完了</button>
-                    @else
-                        <a href="{{ route('item.chats.open', $item->id) }}" class="transaction-btn">取引開始</a>
-                    @endif
-
+                @if ($item->user_id !== auth()->id() &&
+                !in_array(optional($item->transaction)->status, ['in_progress', 'waiting_for_seller', 'completed']) && !$item->is_sold)
+                <div class="transaction-link">
+                    <a href="{{ route('item.chats.open', $item->id) }}" class="transaction-btn">取引開始</a>
                 </div>
+                @endif
             </div>
 
             <div class="item-data__group description">
